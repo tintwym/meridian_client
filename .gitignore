@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+build/
+dist/
+.next/
+coverage/
+.turbo/
+.cache/
+.vite/
+*.tsbuildinfo
+
+# Vercel / local deploy
+.vercel/
+
+# Logs & OS
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+._*
+Thumbs.db
+
+# Env / secrets (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+
+# Editor / tooling
+.idea/
+.vscode/
+*.swp
+*~
+.eslintcache
+.stylelintcache
+
+
+# Test / temp
+tmp/
+temp/
+*.local
+
+# Local admin account store (server-side)
+/data/**
+!/data/.gitkeep
+

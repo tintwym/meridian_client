@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Meridian">
+  <rect width="32" height="32" rx="16" fill="#F3F1EC"/>
+  <circle cx="16" cy="16" r="14.5" fill="none" stroke="#8B7355" stroke-width="0.75"/>
+  <circle cx="16" cy="16" r="11.5" fill="none" stroke="#8B7355" stroke-width="0.5"/>
+  <text x="16" y="21.5" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" font-weight="600" fill="#8B7355">M</text>
+  <path d="M9.2 18.2c1.1-2.2 2.4-3.4 3.6-3.8" fill="none" stroke="#8B7355" stroke-width="0.7" stroke-linecap="round"/>
+  <path d="M10.4 15.6c0.6-0.2 1.1 0.2 1.3 0.7M11.1 14.2c0.5-0.1 0.9 0.3 1 0.7" fill="none" stroke="#8B7355" stroke-width="0.55" stroke-linecap="round"/>
+  <path d="M21.2 12.4l0.9 0.9M22.1 12.4l-0.9 0.9M21.65 11.7v1.9" stroke="#8B7355" stroke-width="0.55" stroke-linecap="round"/>
+</svg>
