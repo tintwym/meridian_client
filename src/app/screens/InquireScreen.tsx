@@ -121,7 +121,7 @@ export default function InquireScreen({ activePlan }: InquireScreenProps) {
             </p>
 
             {activePlan && (
-              <div className="rounded-xl border border-ink/10 bg-black/3 px-4 py-3">
+              <div className="rounded-xl border border-atlantic/20 bg-atlantic/5 px-4 py-3">
                 <p className="font-app-sans text-[10px] tracking-[0.18em] text-atlantic uppercase">
                   Attached plan
                 </p>
@@ -179,7 +179,7 @@ export default function InquireScreen({ activePlan }: InquireScreenProps) {
                 rows={4}
                 value={formData.vision}
                 onChange={(e) => setFormData({ ...formData, vision: e.target.value })}
-                className="app-input min-h-24 resize-none rounded-none"
+                className="app-input min-h-24 resize-none"
                 placeholder="Aesthetic, guests, travel needs…"
               />
             </Field>
@@ -209,7 +209,7 @@ export default function InquireScreen({ activePlan }: InquireScreenProps) {
             )}
 
             {message && !done && (
-              <p className="font-app-sans text-sm text-rose-700">{message}</p>
+              <p className="font-app-sans text-sm text-red-700">{message}</p>
             )}
 
             <button

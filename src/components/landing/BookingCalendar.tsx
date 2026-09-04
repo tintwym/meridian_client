@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar as CalendarIcon, Clock, Users, MapPin, CheckCircle, Sparkles, Download, ArrowRight, Video, Building, Map } from 'lucide-react';
+import { CheckCircle, Sparkles, Download, ArrowRight, Video, Building, Map } from 'lucide-react';
 import { TimeSlot } from '../../landingTypes';
 import { submitLead } from '../../api';
 import { BRAND } from '../../brand';
@@ -132,7 +132,7 @@ END:VCALENDAR`;
               <div className="lg:col-span-5 space-y-6">
                 
                 <div>
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate/70 block mb-2">
+                  <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-2">
                     1. Choose Consultation Date:
                   </label>
                   <input
@@ -141,14 +141,14 @@ END:VCALENDAR`;
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
                     min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-5 py-3.5 rounded-2xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage shadow-inner font-mono cursor-pointer"
+                    className="w-full px-5 py-3.5 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic font-app-sans cursor-pointer"
                     id="booking-date-picker"
                   />
                 </div>
 
                 {/* Time Slots */}
                 <div>
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate/70 block mb-2">
+                  <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-2">
                     2. Select Preferred Time Slot:
                   </label>
                   <div className="grid grid-cols-2 gap-2.5">
@@ -160,17 +160,17 @@ END:VCALENDAR`;
                           type="button"
                           disabled={!slot.available}
                           onClick={() => setSelectedTime(slot.time)}
-                          className={`px-3.5 py-3 rounded-xl border text-xs font-mono transition-all flex items-center justify-between cursor-pointer ${
+                          className={`px-3.5 py-3 rounded-xl border text-xs font-app-sans transition-all flex items-center justify-between cursor-pointer ${
                             !slot.available
-                              ? 'opacity-40 bg-navy/8 text-champagne/50 cursor-not-allowed border-navy/10'
+                              ? 'opacity-40 bg-ink/5 text-ink/45 cursor-not-allowed border-ink/10'
                               : isSelected
-                              ? 'bg-navy text-champagne border-navy shadow-sm'
-                              : 'bg-champagne text-navy border-navy/10 hover:border-sage'
+                              ? 'bg-ink text-paper border-ink shadow-sm'
+                              : 'bg-white text-ink border-ink/12 hover:border-atlantic'
                           }`}
                           id={`booking-slot-${slot.id}`}
                         >
                           <span>{slot.time}</span>
-                          {isSelected && <Sparkles className="w-3 h-3 text-sage" />}
+                          {isSelected && <Sparkles className="w-3 h-3 text-atlantic" />}
                         </button>
                       );
                     })}
@@ -179,7 +179,7 @@ END:VCALENDAR`;
 
                 {/* Consultation Format Options */}
                 <div>
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate/70 block mb-2">
+                  <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-2">
                     3. Consultation Format:
                   </label>
                   <div className="grid grid-cols-3 gap-2">
@@ -197,13 +197,13 @@ END:VCALENDAR`;
                           onClick={() => setConsultationType(item.type as any)}
                           className={`p-3 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1.5 ${
                             isSelected
-                              ? 'bg-navy text-champagne border-navy'
-                              : 'bg-champagne text-slate border-navy/10 hover:border-sage'
+                              ? 'bg-ink text-paper border-ink'
+                              : 'bg-white text-ink/55 border-ink/12 hover:border-atlantic'
                           }`}
                           id={`consultation-format-${item.type.replace(/\s+/g, '-').toLowerCase()}`}
                         >
-                          <Icon className={`w-4 h-4 ${isSelected ? 'text-sage' : 'text-sage'}`} />
-                          <span className="text-[10px] font-mono tracking-wider">{item.type}</span>
+                          <Icon className={`w-4 h-4 ${isSelected ? 'text-atlantic' : 'text-atlantic'}`} />
+                          <span className="text-[10px] font-app-sans tracking-wider">{item.type}</span>
                         </button>
                       );
                     })}
@@ -213,15 +213,15 @@ END:VCALENDAR`;
               </div>
 
               {/* Right Column: Inquiry Form Inputs */}
-              <div className="lg:col-span-7 space-y-5 bg-champagne p-8 rounded-[28px] border border-navy/10 shadow-sm">
+              <div className="lg:col-span-7 space-y-5 bg-paper p-8 rounded-[28px] border border-ink/10 shadow-sm">
                 
-                <h3 className="font-serif font-semibold text-xl text-navy mb-2">
+                <h3 className="font-app-display font-semibold text-xl text-ink mb-2">
                   4. Event & Contact Details
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                    <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                       Full Name *
                     </label>
                     <input
@@ -231,13 +231,13 @@ END:VCALENDAR`;
                       placeholder="e.g. Victoria Vance"
                       value={formData.clientName}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                       id="booking-input-name"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                    <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                       Email Address *
                     </label>
                     <input
@@ -247,7 +247,7 @@ END:VCALENDAR`;
                       placeholder="e.g. victoria@example.com"
                       value={formData.clientEmail}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                       id="booking-input-email"
                     />
                   </div>
@@ -255,7 +255,7 @@ END:VCALENDAR`;
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                    <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                       Phone Number
                     </label>
                     <input
@@ -264,20 +264,20 @@ END:VCALENDAR`;
                       placeholder="+1 (555) 019-2831"
                       value={formData.clientPhone}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                       id="booking-input-phone"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                    <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                       Event Category
                     </label>
                     <select
                       name="eventType"
                       value={formData.eventType}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                       id="booking-select-eventtype"
                     >
                       <option value="Weddings">Wedding Celebration</option>
@@ -290,7 +290,7 @@ END:VCALENDAR`;
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                    <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                       Estimated Guest Scale
                     </label>
                     <input
@@ -298,20 +298,20 @@ END:VCALENDAR`;
                       name="guestCount"
                       value={formData.guestCount}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                       id="booking-input-guestcount"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                    <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                       Budget Tier
                     </label>
                     <select
                       name="budgetRange"
                       value={formData.budgetRange}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                       id="booking-select-budget"
                     >
                       <option value="$50,000 - $75,000">$50,000 - $75,000</option>
@@ -323,7 +323,7 @@ END:VCALENDAR`;
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                  <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                     Envisioned Location / Venue
                   </label>
                   <input
@@ -332,13 +332,13 @@ END:VCALENDAR`;
                     placeholder="e.g. Napa Valley Estate or Amalfi Coast Villa"
                     value={formData.eventLocation}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                     id="booking-input-location"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-mono uppercase text-slate/70 block mb-1">
+                  <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block mb-1">
                     Special Vision Notes / Aesthetic Preferences
                   </label>
                   <textarea
@@ -347,7 +347,7 @@ END:VCALENDAR`;
                     placeholder="Share any preferred color palettes, dietary requirements, or theme ideas..."
                     value={formData.specialRequests}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                     id="booking-input-notes"
                   />
                 </div>
@@ -361,11 +361,11 @@ END:VCALENDAR`;
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-full bg-navy text-champagne text-xs uppercase tracking-widest font-semibold hover:bg-sage transition-all duration-300 flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
+                    className="w-full py-4 rounded-xl bg-ink text-paper text-xs uppercase tracking-widest font-semibold hover:bg-atlantic transition-all duration-300 flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
                     id="booking-submit-btn"
                   >
                     <span>{isSubmitting ? 'Reserving Strategy Slot...' : 'Confirm Strategy Session'}</span>
-                    <ArrowRight className="w-4 h-4 text-sage" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
 
@@ -375,39 +375,39 @@ END:VCALENDAR`;
           ) : (
             /* Booking Confirmation View */
             <div className="max-w-2xl mx-auto text-center space-y-6 py-6 animate-fade-in">
-              <div className="w-20 h-20 rounded-full bg-champagne border border-sage flex items-center justify-center text-sage mx-auto shadow-md">
-                <CheckCircle className="w-10 h-10 text-sage" />
+              <div className="w-20 h-20 rounded-full bg-paper border border-atlantic flex items-center justify-center text-atlantic mx-auto shadow-md">
+                <CheckCircle className="w-10 h-10 text-atlantic" />
               </div>
 
               <div>
-                <span className="text-xs font-mono uppercase tracking-[0.2em] text-sage block mb-1">
+                <span className="font-app-sans text-[11px] tracking-[0.16em] text-atlantic uppercase block mb-1">
                   Confirmation Code: {confirmedRef}
                 </span>
-                <h3 className="text-3xl font-serif font-light text-navy">
+                <h3 className="text-3xl font-app-display font-light text-ink">
                   Consultation Successfully Reserved!
                 </h3>
-                <p className="text-slate text-sm mt-2 font-light">
-                  Thank you, <span className="font-semibold text-navy">{formData.clientName}</span>. A calendar invitation has been prepared for <span className="font-medium text-navy">{selectedDate}</span> at <span className="font-medium text-navy">{selectedTime}</span>.
+                <p className="text-ink/55 text-sm mt-2 font-light">
+                  Thank you, <span className="font-semibold text-ink">{formData.clientName}</span>. A calendar invitation has been prepared for <span className="font-medium text-ink">{selectedDate}</span> at <span className="font-medium text-ink">{selectedTime}</span>.
                 </p>
               </div>
 
               {/* Summary Card */}
-              <div className="p-6 rounded-2xl bg-champagne border border-navy/10 text-left text-xs space-y-2 font-mono text-slate">
+              <div className="p-6 rounded-2xl bg-paper border border-ink/10 text-left text-xs space-y-2 font-app-sans text-ink/55">
                 <div className="flex justify-between">
                   <span>Client Name:</span>
-                  <span className="text-navy font-semibold">{formData.clientName} ({formData.clientEmail})</span>
+                  <span className="text-ink font-semibold">{formData.clientName} ({formData.clientEmail})</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Format:</span>
-                  <span className="text-navy font-semibold">{consultationType}</span>
+                  <span className="text-ink font-semibold">{consultationType}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Event Category:</span>
-                  <span className="text-navy font-semibold">{formData.eventType}</span>
+                  <span className="text-ink font-semibold">{formData.eventType}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Guest Scale & Budget:</span>
-                  <span className="text-navy font-semibold">{formData.guestCount} Guests • {formData.budgetRange}</span>
+                  <span className="text-ink font-semibold">{formData.guestCount} Guests • {formData.budgetRange}</span>
                 </div>
               </div>
 
@@ -415,16 +415,16 @@ END:VCALENDAR`;
               <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
                 <button
                   onClick={handleDownloadICS}
-                  className="px-6 py-3.5 rounded-full bg-navy text-champagne text-xs uppercase tracking-widest font-semibold hover:bg-sage transition-colors flex items-center gap-2 shadow-md cursor-pointer"
+                  className="px-6 py-3.5 rounded-xl bg-ink text-paper text-xs uppercase tracking-widest font-semibold hover:bg-atlantic transition-colors flex items-center gap-2 shadow-md cursor-pointer"
                   id="booking-download-ics-btn"
                 >
-                  <Download className="w-4 h-4 text-sage" />
+                  <Download className="w-4 h-4" />
                   <span>Download .ICS Calendar File</span>
                 </button>
 
                 <button
                   onClick={() => setConfirmedRef(null)}
-                  className="px-6 py-3.5 rounded-full bg-champagne text-navy border border-navy/10 hover:border-sage text-xs uppercase tracking-widest font-semibold cursor-pointer"
+                  className="px-6 py-3.5 rounded-xl bg-white text-ink border border-ink/12 hover:border-atlantic text-xs uppercase tracking-widest font-semibold cursor-pointer"
                 >
                   Schedule Another Date
                 </button>

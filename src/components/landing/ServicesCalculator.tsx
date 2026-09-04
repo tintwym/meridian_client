@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { SERVICE_PACKAGES } from '../../data/servicesData';
-import { ServicePackage } from '../../landingTypes';
-import { Check, Sparkles, Sliders, ArrowRight, DollarSign, Calculator, HelpCircle } from 'lucide-react';
+import { Check, Sparkles, ArrowRight, Calculator } from 'lucide-react';
 
 interface ServicesCalculatorProps {
   onSelectPackage: (packageName: string) => void;
@@ -43,19 +42,19 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
   };
 
   return (
-    <section id="services" className="py-24 bg-champagne text-navy border-b border-navy/10">
+    <section id="services" className="py-24 bg-paper text-ink border-b border-ink/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-champagne border border-navy/10 text-xs font-mono uppercase tracking-[0.25em] text-sage">
-            <Sparkles className="w-3.5 h-3.5 text-sage" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-white border border-ink/10 text-xs font-app-sans uppercase tracking-[0.25em] text-atlantic">
+            <Sparkles className="w-3.5 h-3.5 text-atlantic" />
             <span>Service Packages & Investment</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-light text-navy tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-app-display font-light text-ink tracking-tight">
             Transparent Bespoke Offerings
           </h2>
-          <p className="text-slate text-base font-light">
+          <p className="text-ink/55 text-base font-light">
             Every celebration is individually tailored. Select a core package and customize scope parameters below to estimate your investment.
           </p>
         </div>
@@ -70,15 +69,15 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
                 onClick={() => setSelectedPackage(p.id)}
                 className={`rounded-[28px] p-6 border transition-all duration-300 flex flex-col justify-between cursor-pointer relative overflow-hidden ${
                   isSelected
-                    ? 'bg-navy text-champagne border-sage shadow-xl scale-[1.02]'
-                    : 'bg-champagne text-navy border-navy/10 hover:border-sage/50 hover:bg-navy/5'
+                    ? 'bg-ink text-paper border-atlantic shadow-xl scale-[1.02]'
+                    : 'bg-white text-ink border-ink/10 hover:border-atlantic/50 hover:bg-ink/5'
                 }`}
                 id={`service-pkg-card-${p.id}`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-3 min-h-[22px]">
                     {p.popular ? (
-                      <span className="inline-block text-[9px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full bg-sage text-champagne whitespace-nowrap shadow-sm">
+                      <span className="inline-block text-[9px] font-app-sans uppercase tracking-widest px-2.5 py-1 rounded-full bg-atlantic text-paper whitespace-nowrap shadow-sm">
                         Most Popular
                       </span>
                     ) : (
@@ -86,18 +85,18 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
                     )}
                   </div>
 
-                  <h3 className={`font-serif text-xl font-medium mb-2 ${isSelected ? 'text-champagne' : 'text-navy'}`}>
+                  <h3 className={`font-app-display text-xl font-medium mb-2 ${isSelected ? 'text-paper' : 'text-ink'}`}>
                     {p.name}
                   </h3>
-                  <p className={`text-xs font-light mb-4 line-clamp-2 ${isSelected ? 'text-champagne/70' : 'text-slate'}`}>
+                  <p className={`text-xs font-light mb-4 line-clamp-2 ${isSelected ? 'text-paper/70' : 'text-ink/55'}`}>
                     {p.tagline}
                   </p>
 
                   <div className="mb-6 pt-3 border-t border-current/10">
-                    <span className="text-2xl font-serif font-semibold">
+                    <span className="text-2xl font-app-display font-semibold">
                       ${p.startingPrice.toLocaleString()}
                     </span>
-                    <span className={`text-[10px] font-mono uppercase tracking-wider block ${isSelected ? 'text-sage' : 'text-sage'}`}>
+                    <span className={`text-[10px] font-app-sans uppercase tracking-wider block ${isSelected ? 'text-atlantic' : 'text-atlantic'}`}>
                       Starting Planning Fee
                     </span>
                   </div>
@@ -105,8 +104,8 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
                   <ul className="space-y-2 mb-6 text-xs font-light">
                     {p.features.slice(0, 4).map((feat, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <Check className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isSelected ? 'text-sage' : 'text-sage'}`} />
-                        <span className={isSelected ? 'text-champagne/70' : 'text-slate'}>{feat}</span>
+                        <Check className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isSelected ? 'text-atlantic' : 'text-atlantic'}`} />
+                        <span className={isSelected ? 'text-paper/70' : 'text-ink/55'}>{feat}</span>
                       </li>
                     ))}
                   </ul>
@@ -114,10 +113,10 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
 
                 <button
                   type="button"
-                  className={`w-full py-2.5 rounded-full text-xs uppercase tracking-widest font-semibold transition-colors cursor-pointer ${
+                  className={`w-full py-2.5 rounded-xl text-xs uppercase tracking-widest font-semibold transition-colors cursor-pointer ${
                     isSelected
-                      ? 'bg-sage/40 text-navy hover:bg-champagne'
-                      : 'bg-champagne text-navy border border-navy/10 hover:border-sage'
+                      ? 'bg-atlantic text-paper hover:bg-paper hover:text-ink'
+                      : 'bg-paper text-ink border border-ink/10 hover:border-atlantic'
                   }`}
                   id={`select-service-btn-${p.id}`}
                 >
@@ -130,25 +129,25 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
         </div>
 
         {/* Interactive Scope & Investment Calculator Panel */}
-        <div className="bg-champagne rounded-[36px] border border-navy/10 p-8 sm:p-12 shadow-lg">
+        <div className="bg-white rounded-[36px] border border-ink/10 p-8 sm:p-12 shadow-lg">
           
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-navy/10 pb-8 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-ink/10 pb-8 mb-8">
             <div>
-              <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-sage font-mono mb-1">
+              <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-atlantic font-app-sans mb-1">
                 <Calculator className="w-4 h-4" />
                 <span>Interactive Investment Estimator</span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-serif font-light text-navy">
+              <h3 className="text-2xl sm:text-3xl font-app-display font-light text-ink">
                 Customize Event Parameters
               </h3>
             </div>
 
-            <div className="bg-champagne px-6 py-4 rounded-2xl border border-navy/10 flex items-center gap-4">
+            <div className="bg-paper px-6 py-4 rounded-2xl border border-ink/10 flex items-center gap-4">
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-widest text-slate/70 block">
+                <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">
                   Estimated Planning Investment Range:
                 </span>
-                <span className="text-2xl sm:text-3xl font-serif font-semibold text-navy">
+                <span className="text-2xl sm:text-3xl font-app-display font-semibold text-ink">
                   ${estimatedTotal.toLocaleString()} - ${(estimatedTotal * 1.25).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </span>
               </div>
@@ -162,9 +161,9 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
               
               {/* Guest Count Slider */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="uppercase text-slate/70">Estimated Guest Count:</span>
-                  <span className="font-semibold text-sm text-navy px-3 py-1 bg-champagne rounded-full border border-navy/10">
+                <div className="flex items-center justify-between text-xs font-app-sans">
+                  <span className="uppercase text-ink/50 tracking-[0.16em]">Estimated Guest Count:</span>
+                  <span className="font-semibold text-sm text-ink px-3 py-1 bg-paper rounded-xl border border-ink/10">
                     {guestCount} Guests
                   </span>
                 </div>
@@ -175,10 +174,10 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
                   step="10"
                   value={guestCount}
                   onChange={(e) => setGuestCount(Number(e.target.value))}
-                  className="w-full cursor-pointer accent-[var(--color-sage)]"
+                  className="w-full cursor-pointer accent-[var(--color-atlantic)]"
                   id="calculator-guest-slider"
                 />
-                <div className="flex justify-between text-[10px] text-slate/70 font-mono">
+                <div className="flex justify-between text-[10px] text-ink/45 font-app-sans">
                   <span>30 Intimate</span>
                   <span>200 Gala</span>
                   <span>500+ Grand Event</span>
@@ -187,7 +186,7 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
 
               {/* Add-Ons Checklist */}
               <div className="space-y-3">
-                <span className="text-xs font-mono uppercase tracking-wider text-slate/70 block">
+                <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">
                   Additional Curation & Logistics Add-Ons:
                 </span>
 
@@ -206,13 +205,13 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
                         onClick={() => toggleAddOn(item.key)}
                         className={`p-3.5 rounded-xl border text-left flex items-center justify-between text-xs transition-all cursor-pointer ${
                           isChecked
-                            ? 'bg-navy text-champagne border-navy'
-                            : 'bg-champagne text-navy border-navy/10 hover:border-sage'
+                            ? 'bg-ink text-paper border-ink'
+                            : 'bg-white text-ink border-ink/10 hover:border-atlantic'
                         }`}
                         id={`calculator-addon-${item.key}`}
                       >
                         <span className="font-medium pr-2">{item.label}</span>
-                        <span className={`font-mono shrink-0 ${isChecked ? 'text-sage' : 'text-sage'}`}>
+                        <span className={`font-app-sans shrink-0 ${isChecked ? 'text-atlantic' : 'text-atlantic'}`}>
                           {item.price}
                         </span>
                       </button>
@@ -224,45 +223,45 @@ export const ServicesCalculator: React.FC<ServicesCalculatorProps> = ({ onSelect
             </div>
 
             {/* Right Summary Card & Direct CTA */}
-            <div className="lg:col-span-5 bg-champagne p-8 rounded-[28px] border border-navy/10 space-y-6 shadow-sm">
-              <h4 className="font-serif font-semibold text-xl text-navy">
+            <div className="lg:col-span-5 bg-paper p-8 rounded-[28px] border border-ink/10 space-y-6 shadow-sm">
+              <h4 className="font-app-display font-semibold text-xl text-ink">
                 Scope Estimate Summary
               </h4>
 
-              <div className="space-y-2 text-xs text-slate font-light border-b border-navy/10 pb-4">
+              <div className="space-y-2 text-xs text-ink/55 font-light border-b border-ink/10 pb-4">
                 <div className="flex justify-between">
                   <span>Selected Package:</span>
-                  <span className="font-medium text-navy">{pkg.name}</span>
+                  <span className="font-medium text-ink">{pkg.name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Guest Scale:</span>
-                  <span className="font-medium text-navy">{guestCount} Guests</span>
+                  <span className="font-medium text-ink">{guestCount} Guests</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Add-Ons Total:</span>
-                  <span className="font-medium text-navy">${addOnsTotal.toLocaleString()}</span>
+                  <span className="font-medium text-ink">${addOnsTotal.toLocaleString()}</span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] uppercase font-mono tracking-widest text-slate/70 block">
+                <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">
                   Estimated Total Fee:
                 </span>
-                <span className="text-3xl font-serif font-semibold text-navy">
+                <span className="text-3xl font-app-display font-semibold text-ink">
                   ${estimatedTotal.toLocaleString()}
                 </span>
-                <p className="text-[11px] text-slate/70 font-light">
+                <p className="text-[11px] text-ink/45 font-light">
                   *Excludes third-party vendor hard costs (catering, floral materials, venue rentals).
                 </p>
               </div>
 
               <button
                 onClick={handleBookSelected}
-                className="w-full py-4 rounded-full bg-navy text-champagne text-xs uppercase tracking-widest font-semibold hover:bg-sage transition-all duration-300 flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                className="w-full py-4 rounded-xl bg-ink text-paper text-xs uppercase tracking-widest font-semibold hover:bg-atlantic transition-all duration-300 flex items-center justify-center gap-2 shadow-md cursor-pointer"
                 id="calculator-reserve-date-btn"
               >
                 <span>Reserve Date with Selected Scope</span>
-                <ArrowRight className="w-4 h-4 text-sage" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 

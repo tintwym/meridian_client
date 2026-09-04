@@ -81,25 +81,25 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-navy/70 md:backdrop-blur-md">
-      <div className="bg-champagne border border-navy/10 rounded-t-2xl sm:rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl relative max-h-[min(92dvh,40rem)] overflow-y-auto">
-        <div className="bg-navy text-champagne px-6 py-6 relative sticky top-0 z-10">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-ink/70 md:backdrop-blur-md">
+      <div className="bg-paper border border-ink/10 rounded-t-2xl sm:rounded-[32px] w-full max-w-lg overflow-hidden shadow-2xl relative max-h-[min(92dvh,40rem)] overflow-y-auto">
+        <div className="bg-ink text-paper px-6 py-6 relative sticky top-0 z-10">
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-5 right-5 p-2 rounded-full bg-navy/80 text-sage hover:text-champagne transition-colors focus:outline-none cursor-pointer"
+            className="absolute top-5 right-5 p-2 rounded-xl bg-ink/80 text-atlantic hover:text-paper transition-colors focus:outline-none cursor-pointer"
             aria-label="Close modal"
             id="lead-modal-close-btn"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-sage font-mono mb-1">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-atlantic font-app-sans mb-1">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Exclusive Resource</span>
           </div>
-          <h3 className="text-2xl font-serif font-light text-champagne">Download Planning Guide</h3>
-          <p className="text-xs text-champagne/70 font-light mt-1">
+          <h3 className="text-2xl font-app-display font-light text-paper">Download Planning Guide</h3>
+          <p className="text-xs text-paper/70 font-light mt-1">
             Receive our complementary destination & budget kit.
           </p>
         </div>
@@ -108,11 +108,11 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-mono uppercase text-slate/70 tracking-wider block">Select Guide:</label>
+                <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">Select Guide:</label>
                 <select
                   value={resource}
                   onChange={(e) => setResource(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                   id="lead-modal-resource-select"
                 >
                   <option value="2026 High-Society Destination Guide">2026 High-Society Destination Guide</option>
@@ -122,27 +122,27 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-mono uppercase text-slate/70 tracking-wider block">Your Full Name:</label>
+                <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">Your Full Name:</label>
                 <input
                   type="text"
                   required
                   placeholder="Your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage placeholder-slate/40"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic placeholder-ink/40"
                   id="lead-modal-name-input"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-mono uppercase text-slate/70 tracking-wider block">Your Email Address:</label>
+                <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">Your Email Address:</label>
                 <input
                   type="email"
                   required
                   placeholder="you@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-champagne border border-navy/10 text-navy text-sm focus:outline-none focus:border-sage placeholder-slate/40"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic placeholder-ink/40"
                   id="lead-modal-email-input"
                 />
               </div>
@@ -153,7 +153,7 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-full bg-navy text-champagne text-xs uppercase tracking-widest font-semibold hover:bg-sage transition-colors flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
+                  className="w-full py-3.5 rounded-xl bg-ink text-paper text-xs uppercase tracking-widest font-semibold hover:bg-atlantic transition-colors flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
                   id="lead-modal-submit-btn"
                 >
                   <Download className="w-4 h-4" />
@@ -161,21 +161,21 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
                 </button>
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] text-slate/70 justify-center pt-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-sage" />
+              <div className="flex items-center gap-2 text-[11px] text-ink/45 justify-center pt-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-atlantic" />
                 <span>Your information is strictly confidential.</span>
               </div>
             </form>
           ) : (
             <div className="text-center space-y-5 py-4">
-              <div className="w-16 h-16 rounded-full bg-champagne border border-sage flex items-center justify-center text-sage mx-auto shadow-sm">
-                <CheckCircle className="w-8 h-8 text-sage" />
+              <div className="w-16 h-16 rounded-full bg-paper border border-atlantic flex items-center justify-center text-atlantic mx-auto shadow-sm">
+                <CheckCircle className="w-8 h-8 text-atlantic" />
               </div>
 
               <div>
-                <h4 className="font-serif font-semibold text-xl text-navy">Guide Ready!</h4>
-                <p className="text-xs text-slate mt-1 font-light">
-                  Thank you, <span className="font-medium text-navy">{name || 'Guest'}</span>. Your copy of{' '}
+                <h4 className="font-app-display font-semibold text-xl text-ink">Guide Ready!</h4>
+                <p className="text-xs text-ink/55 mt-1 font-light">
+                  Thank you, <span className="font-medium text-ink">{name || 'Guest'}</span>. Your copy of{' '}
                   <span className="italic font-medium">{resource}</span> is ready below.
                 </p>
               </div>
@@ -183,7 +183,7 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
               <button
                 type="button"
                 onClick={handleDownload}
-                className="w-full py-3.5 rounded-full bg-navy text-champagne text-xs uppercase tracking-widest font-semibold hover:bg-sage transition-colors flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                className="w-full py-3.5 rounded-xl bg-ink text-paper text-xs uppercase tracking-widest font-semibold hover:bg-atlantic transition-colors flex items-center justify-center gap-2 shadow-md cursor-pointer"
                 id="lead-modal-download-file-btn"
               >
                 <Download className="w-4 h-4" />
@@ -193,7 +193,7 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
               <button
                 type="button"
                 onClick={onClose}
-                className="text-xs text-slate/70 hover:text-navy block mx-auto pt-2 cursor-pointer"
+                className="text-xs text-ink/45 hover:text-ink block mx-auto pt-2 cursor-pointer"
               >
                 Close Window
               </button>

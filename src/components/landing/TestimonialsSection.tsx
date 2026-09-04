@@ -1,6 +1,9 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { TESTIMONIALS } from '../../data/servicesData';
 import { MapPin } from 'lucide-react';
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export const TestimonialsSection: React.FC = () => {
   return (
@@ -19,9 +22,13 @@ export const TestimonialsSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
-            <blockquote
+          {TESTIMONIALS.map((t, i) => (
+            <motion.blockquote
               key={t.id}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: i * 0.08, ease }}
               className="flex flex-col justify-between border-t border-ink/12 pt-6"
               id={`testimonial-card-${t.id}`}
             >
@@ -46,7 +53,7 @@ export const TestimonialsSection: React.FC = () => {
                   </p>
                 </div>
               </footer>
-            </blockquote>
+            </motion.blockquote>
           ))}
         </div>
       </div>

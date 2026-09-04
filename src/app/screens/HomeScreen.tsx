@@ -222,7 +222,16 @@ export default function HomeScreen({
         {nearby.loading && !hasVenues ? (
           <ul className="mt-5 flex flex-col gap-2.5" aria-hidden>
             {[0, 1, 2].map((i) => (
-              <li key={i} className="h-17 animate-pulse rounded-xl border border-ink/8 bg-ink/3" />
+              <li
+                key={i}
+                className="flex animate-pulse items-center gap-3 rounded-xl border border-ink/8 px-3 py-2.5"
+              >
+                <span className="h-[72px] w-[72px] shrink-0 rounded-lg bg-ink/8" />
+                <span className="flex flex-1 flex-col gap-2">
+                  <span className="h-3 w-2/3 rounded bg-ink/8" />
+                  <span className="h-2.5 w-1/2 rounded bg-ink/5" />
+                </span>
+              </li>
             ))}
           </ul>
         ) : null}
@@ -232,7 +241,7 @@ export default function HomeScreen({
             <button
               type="button"
               onClick={() => void nearby.refresh()}
-              className="w-full bg-ink px-5 py-3.5 font-app-sans text-sm font-semibold text-paper transition-opacity hover:opacity-90"
+              className="app-btn app-btn-ink w-full px-5 py-3.5 font-app-sans text-sm font-semibold"
             >
               {locationBlocked ? 'Try location again' : 'Find venues near me'}
             </button>

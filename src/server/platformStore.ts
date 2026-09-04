@@ -636,9 +636,9 @@ export async function verifyEmailOtp(
  * Google / Apple sign-in.
  * - Google: verify idToken when GOOGLE_CLIENT_ID is set.
  * - Apple: decode idToken claims (JWKS verify later); accept email + subject.
- * - Stub: email + provider when AUTH_SOCIAL_STUB !== '0' and token verify isn't available.
- *   Default allows stub even in production until OAuth is fully configured.
- *   Set AUTH_SOCIAL_STUB=0 to require real tokens / GOOGLE_CLIENT_ID.
+ * - Stub: email + provider when token verify isn't available.
+ *   Allowed in development by default. In production, stub only if AUTH_SOCIAL_STUB=1.
+ *   Set AUTH_SOCIAL_STUB=0 to forbid stub even in development.
  */
 export async function socialSignIn(body: {
   provider: SocialProvider;

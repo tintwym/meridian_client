@@ -189,7 +189,7 @@ export default function MarketingApp() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 bg-navy/70 md:backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
+            className="fixed inset-0 z-50 bg-ink/70 md:backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
             style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
             onClick={() => setIsModalOpen(false)}
           >
@@ -198,15 +198,15 @@ export default function MarketingApp() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.98, y: 16 }}
               transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-white max-w-lg w-full border border-navy/10 shadow-2xl relative text-left rounded-t-2xl sm:rounded-2xl max-h-[min(92dvh,40rem)] overflow-y-auto"
+              className="bg-paper max-w-lg w-full border border-ink/10 shadow-2xl relative text-left rounded-t-2xl sm:rounded-2xl max-h-[min(92dvh,40rem)] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-linear-to-r from-sage via-sage/80 to-navy h-1.5 w-full sticky top-0 z-10" />
+              <div className="bg-linear-to-r from-atlantic via-atlantic/80 to-ink h-1.5 w-full sticky top-0 z-10" />
 
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 z-20 inline-flex size-9 items-center justify-center rounded-full bg-champagne text-navy transition-colors hover:bg-navy hover:text-white"
+                className="absolute top-4 right-4 z-20 inline-flex size-9 items-center justify-center rounded-xl bg-paper text-ink border border-ink/12 transition-colors hover:bg-ink hover:text-paper"
                 aria-label="Close"
               >
                 ×
@@ -216,64 +216,64 @@ export default function MarketingApp() {
                 {!modalFormSubmitted ? (
                   <form onSubmit={handleFormSubmit} className="space-y-5">
                     <div className="space-y-1">
-                      <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-sage flex items-center gap-1">
+                      <span className="text-[9px] font-app-sans uppercase tracking-[0.3em] text-atlantic flex items-center gap-1">
                         <Sparkles className="w-3.5 h-3.5" /> Curate Your Blueprint
                       </span>
-                      <h3 className="font-serif text-2xl md:text-3xl font-semibold text-navy tracking-tight leading-none">
+                      <h3 className="font-app-display text-2xl md:text-3xl font-semibold text-ink tracking-tight leading-none">
                         Plan Your Event
                       </h3>
-                      <p className="text-slate text-xs leading-relaxed pt-1">
+                      <p className="text-ink/55 text-xs leading-relaxed pt-1">
                         Share your vision. If you generated a proposal, we attach a short summary for your planner.
                       </p>
                     </div>
 
                     {activePlan && (
-                      <div className="bg-champagne border border-navy/10 rounded-xl p-3 text-xs space-y-1">
-                        <p className="font-mono text-[9px] uppercase tracking-wider text-sage">Attached proposal</p>
-                        <p className="font-serif text-navy font-semibold">{activePlan.title}</p>
-                        <p className="text-slate">{activePlan.estimatedBudgetRange}</p>
+                      <div className="bg-white border border-ink/10 rounded-xl p-3 text-xs space-y-1">
+                        <p className="font-app-sans text-[9px] uppercase tracking-wider text-atlantic">Attached proposal</p>
+                        <p className="font-app-display text-ink font-semibold">{activePlan.title}</p>
+                        <p className="text-ink/55">{activePlan.estimatedBudgetRange}</p>
                       </div>
                     )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-mono uppercase tracking-wider text-slate">Full Name</label>
+                        <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Full Name</label>
                         <input
                           type="text"
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="Your name"
-                          className="w-full bg-champagne border border-navy/10 px-3 py-2.5 text-xs text-navy rounded-full focus:outline-none focus:ring-1 focus:ring-sage"
+                          className="w-full bg-white border border-ink/12 px-3 py-2.5 text-xs text-ink rounded-xl focus:outline-none focus:border-atlantic"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-mono uppercase tracking-wider text-slate">Private Email</label>
+                        <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Private Email</label>
                         <input
                           type="email"
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="you@email.com"
-                          className="w-full bg-champagne border border-navy/10 px-3 py-2.5 text-xs text-navy rounded-full focus:outline-none focus:ring-1 focus:ring-sage"
+                          className="w-full bg-white border border-ink/12 px-3 py-2.5 text-xs text-ink rounded-xl focus:outline-none focus:border-atlantic"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-mono uppercase tracking-wider text-slate flex items-center gap-1">
+                        <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase flex items-center gap-1">
                           <MapPin className="w-3.5 h-3.5" /> Intended Location
                         </label>
                         <input
                           type="text"
                           value={formData.location}
                           onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                          className="w-full bg-champagne border border-navy/10 px-3 py-2.5 text-xs text-navy rounded-full focus:outline-none focus:ring-1 focus:ring-sage"
+                          className="w-full bg-white border border-ink/12 px-3 py-2.5 text-xs text-ink rounded-xl focus:outline-none focus:border-atlantic"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-mono uppercase tracking-wider text-slate flex items-center gap-1">
+                        <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase flex items-center gap-1">
                           <Calendar className="w-3.5 h-3.5" /> Target Month / Season
                         </label>
                         <input
@@ -282,31 +282,31 @@ export default function MarketingApp() {
                           placeholder="e.g., Sept 2026"
                           value={formData.date}
                           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                          className="w-full bg-champagne border border-navy/10 px-3 py-2.5 text-xs text-navy rounded-full focus:outline-none focus:ring-1 focus:ring-sage"
+                          className="w-full bg-white border border-ink/12 px-3 py-2.5 text-xs text-ink rounded-xl focus:outline-none focus:border-atlantic"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[9px] font-mono uppercase tracking-wider text-slate flex items-center gap-1">
+                      <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase flex items-center gap-1">
                         <DollarSign className="w-3.5 h-3.5" /> Target Budget
                       </label>
                       <input
                         type="text"
                         value={formData.budget}
                         onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                        className="w-full bg-champagne border border-navy/10 px-3 py-2.5 text-xs text-navy rounded-full focus:outline-none focus:ring-1 focus:ring-sage"
+                        className="w-full bg-white border border-ink/12 px-3 py-2.5 text-xs text-ink rounded-xl focus:outline-none focus:border-atlantic"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[9px] font-mono uppercase tracking-wider text-slate">Your Celebration Vision</label>
+                      <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Your Celebration Vision</label>
                       <textarea
                         rows={3}
                         value={formData.vision}
                         onChange={(e) => setFormData({ ...formData, vision: e.target.value })}
                         placeholder="Aesthetic, culinary direction, travel needs..."
-                        className="w-full bg-champagne border border-navy/10 px-3 py-2 text-xs text-navy rounded-xl focus:outline-none focus:ring-1 focus:ring-sage resize-none"
+                        className="w-full bg-white border border-ink/12 px-3 py-2 text-xs text-ink rounded-xl focus:outline-none focus:border-atlantic resize-none"
                       />
                     </div>
 
@@ -317,15 +317,15 @@ export default function MarketingApp() {
                     <button
                       type="submit"
                       disabled={leadSubmitting}
-                      className="w-full bg-navy hover:bg-sage text-white font-mono text-[10px] uppercase tracking-[0.2em] py-3.5 rounded-full transition-colors flex items-center justify-center gap-2 font-semibold disabled:opacity-60"
+                      className="w-full bg-ink hover:bg-atlantic text-paper font-app-sans text-[10px] uppercase tracking-[0.2em] py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 font-semibold disabled:opacity-60"
                     >
                       <span>{leadSubmitting ? 'Submitting…' : 'Submit Intention Form'}</span>
                       <Send className="w-3.5 h-3.5" />
                     </button>
 
-                    <div className="flex items-center justify-center space-x-4 pt-3 border-t border-navy/5 text-[10px] text-slate font-mono uppercase">
+                    <div className="flex items-center justify-center space-x-4 pt-3 border-t border-ink/8 text-[10px] text-ink/45 font-app-sans uppercase">
                       <span className="flex items-center gap-1">
-                        <ShieldCheck className="w-4 h-4 text-sage" /> Fully Bonded
+                        <ShieldCheck className="w-4 h-4 text-atlantic" /> Fully Bonded
                       </span>
                       <span>·</span>
                       <span>100% Confidential</span>
@@ -338,27 +338,27 @@ export default function MarketingApp() {
                     className="text-center py-8 space-y-6"
                   >
                     <div className="flex justify-center">
-                      <CheckCircle2 className="w-16 h-16 text-sage" />
+                      <CheckCircle2 className="w-16 h-16 text-atlantic" />
                     </div>
                     <div className="space-y-2">
-                      <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-sage block">
+                      <span className="text-[9px] font-app-sans uppercase tracking-[0.3em] text-atlantic block">
                         Intention Logged Successfully
                       </span>
-                      <h4 className="font-serif text-2xl font-bold text-navy">Thank You, {formData.name}</h4>
-                      <p className="text-slate text-xs leading-relaxed max-w-sm mx-auto">
+                      <h4 className="font-app-display text-2xl font-bold text-ink">Thank You, {formData.name}</h4>
+                      <p className="text-ink/55 text-xs leading-relaxed max-w-sm mx-auto">
                         Your celebration blueprint at{' '}
-                        <span className="font-semibold text-navy">{formData.location}</span> has been compiled. A lead
+                        <span className="font-semibold text-ink">{formData.location}</span> has been compiled. A lead
                         planner will follow up at{' '}
-                        <span className="font-semibold text-navy">{formData.email}</span>.
+                        <span className="font-semibold text-ink">{formData.email}</span>.
                       </p>
                       {leadMessage && (
-                        <p className="text-[10px] font-mono text-sage pt-2">{leadMessage}</p>
+                        <p className="text-[10px] font-app-sans text-atlantic pt-2">{leadMessage}</p>
                       )}
                     </div>
                     <button
                       type="button"
                       onClick={() => setIsModalOpen(false)}
-                      className="bg-navy text-white font-mono text-[10px] uppercase tracking-widest px-8 py-3 rounded-full hover:bg-sage transition-colors"
+                      className="bg-ink text-paper font-app-sans text-[10px] uppercase tracking-widest px-8 py-3 rounded-xl hover:bg-atlantic transition-colors"
                     >
                       Return to Meridian
                     </button>

@@ -87,9 +87,9 @@ export default function PlanWizard({ initial, generating, error, onGenerate }: P
     <div className="px-5 py-6">
       <div className="mb-6 flex gap-1.5">
         {[0, 1, 2].map((i) => (
-          <div key={i} className="h-1 flex-1 overflow-hidden bg-ink/10">
+          <div key={i} className="h-1.5 flex-1 overflow-hidden rounded-full bg-ink/10">
             <div
-              className={`h-full bg-atlantic transition-all duration-300 ease-out ${
+              className={`h-full rounded-full bg-atlantic transition-all duration-300 ease-out ${
                 i <= step ? 'w-full' : 'w-0'
               }`}
             />

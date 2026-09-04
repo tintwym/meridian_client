@@ -229,7 +229,11 @@ export default function ClubScreen() {
 
   if (!ready) {
     return (
-      <div className="flex min-h-full items-center justify-center bg-paper px-5 py-16">
+      <div className="flex min-h-full flex-col items-center justify-center gap-3 bg-paper px-5 py-16">
+        <span
+          className="inline-flex h-6 w-6 animate-spin rounded-full border-2 border-ink/10 border-t-atlantic"
+          aria-hidden
+        />
         <p className="font-app-sans text-sm text-ink/50">Loading Club…</p>
       </div>
     );
