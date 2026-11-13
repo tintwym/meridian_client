@@ -8,9 +8,9 @@ import {
   DollarSign,
   Send,
   ShieldCheck,
+  ArrowRight,
 } from 'lucide-react';
 import Header from './components/Header';
-import Designer from './components/Designer';
 import { HeroSection } from './components/landing/HeroSection';
 import { PortfolioGallery } from './components/landing/PortfolioGallery';
 import { BookingCalendar } from './components/landing/BookingCalendar';
@@ -19,17 +19,22 @@ import { TestimonialsSection } from './components/landing/TestimonialsSection';
 import { FaqSection } from './components/landing/FaqSection';
 import { Footer } from './components/landing/Footer';
 import { LeadMagnetModal } from './components/landing/LeadMagnetModal';
-import type { DesignerPrefill, EventPlanResponse } from './types';
+import { BRAND } from './brand';
+import type { EventPlanResponse } from './types';
 import { submitLead } from './api';
-import { savePlanBundle } from './lib/planStorage';
 
-/** Marketing landing + product funnel for browsers. Native / ?app=1 use MobileApp. */
+function enterApp(tab: 'home' | 'plan' | 'inquire' | 'club' = 'plan') {
+  const url = new URL(window.location.href);
+  url.searchParams.set('app', '1');
+  url.searchParams.set('tab', tab);
+  window.location.assign(url.toString());
+}
+
+/** Marketing landing — brand-first; blueprint lives in the app shell. */
 export default function MarketingApp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalFormSubmitted, setModalFormSubmitted] = useState(false);
   const [activePlan, setActivePlan] = useState<EventPlanResponse | null>(null);
-  const [prefill, setPrefill] = useState<DesignerPrefill | null>(null);
-  const [prefillKey, setPrefillKey] = useState(0);
   const [leadMagnetOpen, setLeadMagnetOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState('2026 Destination Planning Guide');
 
@@ -51,14 +56,6 @@ export default function MarketingApp() {
     scrollTo(`#${sectionId}`);
   };
 
-  const openDesigner = (next?: DesignerPrefill) => {
-    if (next) {
-      setPrefill(next);
-      setPrefillKey((k) => k + 1);
-    }
-    scrollTo('#designer-section');
-  };
-
   const openBooking = () => scrollToSection('booking');
 
   const openLeadMagnet = (resourceName?: string) => {
@@ -66,16 +63,8 @@ export default function MarketingApp() {
     setLeadMagnetOpen(true);
   };
 
-  const openLeadModal = (plan?: EventPlanResponse | null) => {
-    if (plan) {
-      setActivePlan(plan);
-      setFormData((prev) => ({
-        ...prev,
-        location: plan.location || prev.location,
-        vision: prev.vision || `${plan.title} — ${plan.tagline}`,
-        budget: plan.estimatedBudgetRange || prev.budget,
-      }));
-    }
+  const openLeadModal = () => {
+    setActivePlan(null);
     setIsModalOpen(true);
     setModalFormSubmitted(false);
   };
@@ -111,12 +100,11 @@ export default function MarketingApp() {
   return (
     <div className="flex min-h-screen flex-col justify-between bg-paper text-ink antialiased selection:bg-atlantic/20 selection:text-ink">
       <Header
-        onPlanClick={() => openDesigner({ eventType: 'local' })}
+        onPlanClick={() => enterApp('plan')}
         onBookClick={openBooking}
       />
 
       <main>
-        {/* Convert path first: hero → proof → book → about */}
         <HeroSection
           onOpenBooking={openBooking}
           onExplorePortfolio={() => scrollToSection('portfolio')}
@@ -124,22 +112,45 @@ export default function MarketingApp() {
 
         <PortfolioGallery />
 
-        <Designer
-          prefill={prefill}
-          prefillKey={prefillKey}
-          onPlanGenerated={(plan) => {
-            setActivePlan(plan);
-            savePlanBundle(plan, {
-              eventType: 'overseas',
-              guestCount: 100,
-              locationName: plan.location,
-              cateringStyle: 'fine_dining',
-              messageStyle: 'romantic',
-              targetMonth: 'September',
-            });
-          }}
-          onRequestConsult={(plan) => openLeadModal(plan)}
-        />
+        <section
+          id="blueprint-cta"
+          className="border-y border-ink/8 bg-ink text-paper"
+          aria-labelledby="blueprint-cta-heading"
+        >
+          <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-16 sm:px-6 md:flex-row md:items-end md:justify-between md:px-12 md:py-20">
+            <div className="max-w-xl space-y-3">
+              <p className="font-app-sans text-[11px] font-semibold tracking-[0.22em] text-paper/50 uppercase">
+                Atelier app
+              </p>
+              <h2
+                id="blueprint-cta-heading"
+                className="font-app-display text-3xl tracking-tight text-paper sm:text-4xl"
+              >
+                Build a blueprint in {BRAND.name}
+              </h2>
+              <p className="font-app-sans text-sm leading-relaxed text-paper/70 sm:text-[15px]">
+                Explore destinations, shape a proposal, then inquire — all in the planning app.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={() => enterApp('plan')}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-paper px-6 font-app-sans text-sm font-semibold text-ink transition-colors hover:bg-atlantic hover:text-paper"
+              >
+                Start a blueprint
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={openLeadModal}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-paper/25 px-6 font-app-sans text-sm font-medium text-paper/90 transition-colors hover:border-paper/50 hover:bg-paper/10"
+              >
+                Talk to a planner
+              </button>
+            </div>
+          </div>
+        </section>
 
         <BookingCalendar />
 
@@ -206,17 +217,9 @@ export default function MarketingApp() {
                         Talk to a planner
                       </h3>
                       <p className="text-ink/55 text-sm leading-relaxed pt-1">
-                        Share a few details. If you already built a proposal, we attach a short summary.
+                        Share a few details. We&apos;ll follow up from the atelier.
                       </p>
                     </div>
-
-                    {activePlan && (
-                      <div className="bg-white border border-ink/10 rounded-xl p-3 text-xs space-y-1">
-                        <p className="font-app-sans text-[9px] uppercase tracking-wider text-atlantic">Attached proposal</p>
-                        <p className="font-app-display text-ink font-semibold">{activePlan.title}</p>
-                        <p className="text-ink/55">{activePlan.estimatedBudgetRange}</p>
-                      </div>
-                    )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">

@@ -8,11 +8,12 @@ import { useAuth } from '../AuthContext';
 
 interface InquireScreenProps {
   activePlan: EventPlanResponse | null;
+  onOpenClub?: () => void;
 }
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export default function InquireScreen({ activePlan }: InquireScreenProps) {
+export default function InquireScreen({ activePlan, onOpenClub }: InquireScreenProps) {
   const { user, setUserPoints, refreshClub } = useAuth();
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -35,6 +36,16 @@ export default function InquireScreen({ activePlan }: InquireScreenProps) {
       email: prev.email || user.email,
     }));
   }, [user]);
+
+  useEffect(() => {
+    if (!activePlan) return;
+    setFormData((prev) => ({
+      ...prev,
+      location: prev.location || activePlan.location || '',
+      budget: prev.budget || activePlan.estimatedBudgetRange || '',
+      vision: prev.vision || `${activePlan.title} — ${activePlan.tagline}`,
+    }));
+  }, [activePlan]);
 
   const maxRedeemHundreds = user ? Math.floor(user.points / 100) : 0;
   const redeemPoints = redeemHundreds * 100;
@@ -64,7 +75,7 @@ export default function InquireScreen({ activePlan }: InquireScreenProps) {
   };
 
   return (
-    <div className="min-h-full bg-paper text-ink">
+    <div className="flex min-h-full flex-col bg-paper text-ink">
       <header
         className="sticky top-0 z-20 border-b border-ink/8 bg-paper/95 px-5 py-4 backdrop-blur-md"
         style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}
@@ -75,7 +86,7 @@ export default function InquireScreen({ activePlan }: InquireScreenProps) {
         <h1 className="font-app-display text-2xl tracking-tight text-ink">Talk to a planner</h1>
       </header>
 
-      <div className="px-5 py-8 pb-12">
+      <div className="flex flex-1 flex-col px-5 pt-6 pb-28">
         <AnimatePresence mode="wait" initial={false}>
           {done ? (
             <motion.div
@@ -86,144 +97,158 @@ export default function InquireScreen({ activePlan }: InquireScreenProps) {
               transition={{ duration: 0.42, ease }}
               className="space-y-5 py-10 text-center"
             >
-              <motion.div
-                initial={{ scale: 0.7, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.08, ease }}
-              >
-                <CheckCircle2 className="mx-auto h-12 w-12 text-atlantic" />
-              </motion.div>
+              <CheckCircle2 className="mx-auto h-12 w-12 text-atlantic" />
               <h2 className="font-app-display text-3xl text-ink">Thank you, {formData.name}</h2>
               <p className="mx-auto max-w-sm font-app-sans text-sm leading-relaxed text-ink/60">
                 A planner will follow up at {formData.email}.
-                {message ? ` ${message}` : ''} Track status in Meridian Club.
+                {message ? ` ${message}` : ''}
               </p>
-              <button
-                type="button"
-                onClick={() => setDone(false)}
-                className="font-app-sans text-sm text-atlantic underline-offset-4 hover:underline"
-              >
-                Send another inquiry
-              </button>
+              <div className="flex flex-col items-center gap-3 pt-2">
+                {onOpenClub ? (
+                  <button
+                    type="button"
+                    onClick={onOpenClub}
+                    className="app-btn app-btn-ink w-auto! min-w-48"
+                  >
+                    View in Club → Consult
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={() => setDone(false)}
+                  className="font-app-sans text-sm text-atlantic underline-offset-4 hover:underline"
+                >
+                  Send another inquiry
+                </button>
+              </div>
             </motion.div>
           ) : (
             <motion.form
+              id="inquire-form"
               key="form"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.32, ease }}
               onSubmit={onSubmit}
-              className="mx-auto max-w-md space-y-5"
+              className="mx-auto w-full max-w-md space-y-5"
             >
-            <p className="font-app-sans text-sm leading-relaxed text-ink/60">
-              Share a few details. We’ll reply from {BRAND.email.planner}.
-            </p>
+              <p className="font-app-sans text-sm leading-relaxed text-ink/55">
+                Share a few details. We’ll reply from {BRAND.email.planner}.
+              </p>
 
-            {activePlan && (
-              <div className="rounded-xl border border-atlantic/20 bg-atlantic/5 px-4 py-3">
-                <p className="font-app-sans text-[10px] tracking-[0.18em] text-atlantic uppercase">
-                  Attached plan
-                </p>
-                <p className="mt-1 font-app-display text-xl text-ink">{activePlan.title}</p>
-                <p className="font-app-sans text-xs text-ink/55">{activePlan.estimatedBudgetRange}</p>
-              </div>
-            )}
+              {activePlan ? (
+                <div className="border-y border-ink/10 py-4">
+                  <p className="font-app-sans text-[10px] tracking-[0.18em] text-atlantic uppercase">
+                    Attached plan
+                  </p>
+                  <p className="mt-1 font-app-display text-xl text-ink">{activePlan.title}</p>
+                  <p className="font-app-sans text-xs text-ink/50">{activePlan.estimatedBudgetRange}</p>
+                </div>
+              ) : null}
 
-            <Field label="Full name">
-              <input
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="app-input"
-                placeholder="Your name"
-              />
-            </Field>
-            <Field label="Email">
-              <input
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="app-input"
-                placeholder="you@email.com"
-              />
-            </Field>
-            <Field label="Location">
-              <input
-                value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                className="app-input"
-                placeholder="City or destination"
-              />
-            </Field>
-            <Field label="Target month / season">
-              <input
-                required
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="app-input"
-                placeholder="e.g. September 2026"
-              />
-            </Field>
-            <Field label="Budget">
-              <input
-                value={formData.budget}
-                onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                className="app-input"
-                placeholder="Range or notes"
-              />
-            </Field>
-            <Field label="Vision">
-              <textarea
-                rows={4}
-                value={formData.vision}
-                onChange={(e) => setFormData({ ...formData, vision: e.target.value })}
-                className="app-input min-h-24 resize-none"
-                placeholder="Aesthetic, guests, travel needs…"
-              />
-            </Field>
-
-            {user && maxRedeemHundreds > 0 && (
-              <div className="space-y-2 border border-atlantic/25 bg-atlantic/5 px-4 py-3">
-                <p className="font-app-sans text-[11px] tracking-[0.16em] text-atlantic uppercase">
-                  Club credit
-                </p>
-                <p className="font-app-sans text-xs text-ink/60">
-                  You have {user.points.toLocaleString()} pts (≈ ${user.creditUsd}). Apply up to $
-                  {maxRedeemHundreds} toward planning.
-                </p>
+              <Field label="Full name">
                 <input
-                  type="range"
-                  min={0}
-                  max={maxRedeemHundreds}
-                  step={1}
-                  value={redeemHundreds}
-                  onChange={(e) => setRedeemHundreds(Number(e.target.value))}
-                  className="w-full accent-atlantic"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="app-input"
+                  placeholder="Your name"
                 />
-                <p className="font-app-sans text-sm text-ink">
-                  Redeem {redeemPoints} pts → ${redeemHundreds} credit
-                </p>
-              </div>
-            )}
+              </Field>
+              <Field label="Email">
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="app-input"
+                  placeholder="you@email.com"
+                />
+              </Field>
+              <Field label="Location">
+                <input
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  className="app-input"
+                  placeholder="City or destination"
+                />
+              </Field>
+              <Field label="Target month / season">
+                <input
+                  required
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  className="app-input"
+                  placeholder="e.g. September 2026"
+                />
+              </Field>
+              <Field label="Budget">
+                <input
+                  value={formData.budget}
+                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                  className="app-input"
+                  placeholder="Range or notes"
+                />
+              </Field>
+              <Field label="Vision">
+                <textarea
+                  rows={4}
+                  value={formData.vision}
+                  onChange={(e) => setFormData({ ...formData, vision: e.target.value })}
+                  className="app-input min-h-24 resize-none"
+                  placeholder="Aesthetic, guests, travel needs…"
+                />
+              </Field>
 
-            {message && !done && (
-              <p className="font-app-sans text-sm text-red-700">{message}</p>
-            )}
+              {user && maxRedeemHundreds > 0 && (
+                <div className="space-y-2 border border-atlantic/25 bg-atlantic/5 px-4 py-3">
+                  <p className="font-app-sans text-[11px] tracking-[0.16em] text-atlantic uppercase">
+                    Club credit
+                  </p>
+                  <p className="font-app-sans text-xs text-ink/60">
+                    You have {user.points.toLocaleString()} pts (≈ ${user.creditUsd}). Apply up to $
+                    {maxRedeemHundreds} toward planning.
+                  </p>
+                  <input
+                    type="range"
+                    min={0}
+                    max={maxRedeemHundreds}
+                    step={1}
+                    value={redeemHundreds}
+                    onChange={(e) => setRedeemHundreds(Number(e.target.value))}
+                    className="w-full accent-atlantic"
+                  />
+                  <p className="font-app-sans text-sm text-ink">
+                    Redeem {redeemPoints} pts → ${redeemHundreds} credit
+                  </p>
+                </div>
+              )}
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="app-btn app-btn-ink"
-            >
-              {submitting ? 'Sending…' : 'Send inquiry'}
-              <Send className="h-4 w-4" />
-            </button>
-          </motion.form>
+              {message && !done && (
+                <p className="font-app-sans text-sm text-red-700">{message}</p>
+              )}
+            </motion.form>
           )}
         </AnimatePresence>
       </div>
+
+      {!done ? (
+        <div
+          className="sticky z-10 border-t border-ink/8 bg-paper/95 px-5 py-3 backdrop-blur-md"
+          style={{ bottom: 'calc(4.25rem + env(safe-area-inset-bottom, 0px))' }}
+        >
+          <button
+            type="submit"
+            form="inquire-form"
+            disabled={submitting}
+            className="app-btn app-btn-ink mx-auto max-w-md"
+          >
+            {submitting ? 'Sending…' : 'Send inquiry'}
+            <Send className="h-4 w-4" />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

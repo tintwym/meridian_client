@@ -105,12 +105,25 @@ export default function PlanScreen({
           {phase === 'proposal' && 'Proposal'}
           {phase === 'studio' && 'Package Studio'}
         </h1>
-        {phase !== 'wizard' && (
-          <div className="mt-3 flex gap-2 overflow-x-auto font-app-sans text-xs">
-            <PhaseTab label="Proposal" active={phase === 'proposal'} onClick={() => plan && go('proposal')} />
-            <PhaseTab label="Studio" active={phase === 'studio'} onClick={() => plan && go('studio')} />
-          </div>
-        )}
+        <div className="mt-3 flex gap-2 overflow-x-auto font-app-sans text-xs">
+          <PhaseTab
+            label="Wizard"
+            active={phase === 'wizard'}
+            onClick={() => go('wizard')}
+          />
+          <PhaseTab
+            label="Proposal"
+            active={phase === 'proposal'}
+            onClick={() => plan && go('proposal')}
+            disabled={!plan}
+          />
+          <PhaseTab
+            label="Studio"
+            active={phase === 'studio'}
+            onClick={() => plan && go('studio')}
+            disabled={!plan}
+          />
+        </div>
       </header>
 
       <AnimatePresence mode="wait" initial={false}>
@@ -163,16 +176,19 @@ function PhaseTab({
   label,
   active,
   onClick,
+  disabled = false,
 }: {
   label: string;
   active: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`app-chip ${active ? 'app-chip-active' : ''}`}
+      disabled={disabled}
+      className={`app-chip ${active ? 'app-chip-active' : ''} ${disabled ? 'opacity-40' : ''}`}
     >
       {label}
     </button>

@@ -12,7 +12,12 @@ import { loadPlanBundle, savePlanBundle } from '../lib/planStorage';
 function MobileAppShell() {
   const stored = typeof window !== 'undefined' ? loadPlanBundle() : null;
 
-  const [tab, setTab] = useState<AppTab>('home');
+  const [tab, setTab] = useState<AppTab>(() => {
+    if (typeof window === 'undefined') return 'home';
+    const t = new URLSearchParams(window.location.search).get('tab');
+    if (t === 'plan' || t === 'inquire' || t === 'club' || t === 'home') return t;
+    return 'home';
+  });
   const [prefill, setPrefill] = useState<DesignerPrefill | null>(null);
   const [prefillKey, setPrefillKey] = useState(0);
   const [activePlan, setActivePlan] = useState<EventPlanResponse | null>(stored?.plan ?? null);
@@ -92,7 +97,12 @@ function MobileAppShell() {
                 onPhaseChange={setPlanPhase}
               />
             )}
-            {tab === 'inquire' && <InquireScreen activePlan={activePlan} />}
+            {tab === 'inquire' && (
+              <InquireScreen
+                activePlan={activePlan}
+                onOpenClub={() => changeTab('club')}
+              />
+            )}
             {tab === 'club' && <ClubScreen />}
           </motion.div>
         </AnimatePresence>

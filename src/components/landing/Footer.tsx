@@ -82,7 +82,7 @@ export function Footer({ onOpenBooking, onOpenLeadMagnet, onNavigate }: FooterPr
                 ['portfolio', 'Portfolio'],
                 ['booking', 'Book a call'],
                 ['about-planner', 'The atelier'],
-                ['designer-section', 'Event designer'],
+                ['blueprint-cta', 'Build a blueprint'],
                 ['faq', 'FAQ'],
               ].map(([id, label]) => (
                 <li key={id}>

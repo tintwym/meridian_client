@@ -33,6 +33,8 @@ const STYLES: { value: MessageStyle; label: string }[] = [
   { value: 'warm_festive', label: 'Festive' },
 ];
 
+const STEP_LABELS = ['Type', 'Place', 'Tone'] as const;
+
 interface PlanWizardProps {
   initial?: DesignerPrefill | null;
   generating: boolean;
@@ -84,202 +86,227 @@ export default function PlanWizard({ initial, generating, error, onGenerate }: P
   });
 
   return (
-    <div className="px-5 py-6">
-      <div className="mb-6 flex gap-1.5">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="h-1.5 flex-1 overflow-hidden rounded-full bg-ink/10">
-            <div
-              className={`h-full rounded-full bg-atlantic transition-all duration-300 ease-out ${
-                i <= step ? 'w-full' : 'w-0'
+    <div className="flex min-h-[calc(100svh-8rem)] flex-col">
+      <div className="px-5 pt-5 pb-2">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          {STEP_LABELS.map((label, i) => (
+            <button
+              key={label}
+              type="button"
+              onClick={() => i < step && setStep(i)}
+              className={`flex-1 text-center font-app-sans text-[11px] font-semibold tracking-[0.14em] uppercase transition-colors ${
+                i === step ? 'text-atlantic' : i < step ? 'text-ink/55' : 'text-ink/25'
               }`}
-            />
-          </div>
-        ))}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-1.5">
+          {STEP_LABELS.map((_, i) => (
+            <div key={i} className="h-1 flex-1 overflow-hidden rounded-full bg-ink/10">
+              <div
+                className={`h-full rounded-full bg-atlantic transition-all duration-300 ease-out ${
+                  i <= step ? 'w-full' : 'w-0'
+                }`}
+              />
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 font-app-sans text-xs text-ink/40">
+          Step {step + 1} of 3 — {STEP_LABELS[step]}
+        </p>
       </div>
 
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={step}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-        >
-      {step === 0 && (
-        <div className="space-y-5">
-          <h2 className="font-app-display text-3xl text-ink">What are you planning?</h2>
-          <div className="grid gap-3">
-            <Choice
-              active={eventType === 'overseas'}
-              title="Overseas"
-              subtitle="Destination wedding or celebration abroad"
-              onClick={() => setEventType('overseas')}
-            />
-            <Choice
-              active={eventType === 'local'}
-              title="Local"
-              subtitle="Estate, resort, or city venue near you"
-              onClick={() => setEventType('local')}
-            />
-          </div>
-
-          {eventType === 'overseas' ? (
-            <ChipRow
-              label="Focus"
-              options={[
-                { value: 'wedding_ceremony', label: 'Ceremony' },
-                { value: 'air_ticket', label: 'Travel' },
-                { value: 'hotel', label: 'Stays' },
-                { value: 'concierge', label: 'Concierge' },
-              ]}
-              value={overseasCategory}
-              onChange={(v) => setOverseasCategory(v as OverseasCategory)}
-            />
-          ) : (
-            <ChipRow
-              label="Venue mood"
-              options={[
-                { value: 'resort', label: 'Resort' },
-                { value: 'beach', label: 'Beach' },
-                { value: 'hotel', label: 'Hotel' },
-                { value: 'restaurant', label: 'Dining' },
-              ]}
-              value={localCategory}
-              onChange={(v) => setLocalCategory(v as LocalCategory)}
-            />
-          )}
-        </div>
-      )}
-
-      {step === 1 && (
-        <div className="space-y-5">
-          <h2 className="font-app-display text-3xl text-ink">Place & scale</h2>
-          <label className="block space-y-1.5">
-            <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Location</span>
-            <input
-              className="app-input"
-              value={locationName}
-              onChange={(e) => setLocationName(e.target.value)}
-              placeholder={eventType === 'overseas' ? 'e.g. Santorini' : 'e.g. Cotswolds estate'}
-            />
-          </label>
-          {eventType === 'local' && (
-            <NearbyVenueChips
-              countryName={nearby.countryName}
-              venues={nearby.venues}
-              selectedName={locationName}
-              filterCategory={localCategory}
-              loading={nearby.loading}
-              onSelect={(v) => {
-                setLocationName(v.name);
-                setLocalCategory(venueToLocalCategory(v.localCategory));
-              }}
-            />
-          )}
-          <label className="block space-y-1.5">
-            <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">
-              Guests · {guestCount}
-            </span>
-            <input
-              type="range"
-              min={20}
-              max={400}
-              step={10}
-              value={guestCount}
-              onChange={(e) => setGuestCount(Number(e.target.value))}
-              className="w-full accent-atlantic"
-            />
-          </label>
-          <label className="block space-y-1.5">
-            <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Target month</span>
-            <select
-              className="app-input"
-              value={targetMonth}
-              onChange={(e) => setTargetMonth(e.target.value)}
-            >
-              {MONTHS.map((m) => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-      )}
-
-      {step === 2 && (
-        <div className="space-y-5">
-          <h2 className="font-app-display text-3xl text-ink">Tone & table</h2>
-          <ChipRow
-            label="Catering"
-            options={CATERING}
-            value={cateringStyle}
-            onChange={(v) => setCateringStyle(v as CateringStyle)}
-          />
-          <ChipRow
-            label="Voice"
-            options={STYLES}
-            value={messageStyle}
-            onChange={(v) => setMessageStyle(v as MessageStyle)}
-          />
-          <label className="block space-y-1.5">
-            <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Notes</span>
-            <textarea
-              className="app-input min-h-24 resize-none"
-              rows={3}
-              value={specialNotes}
-              onChange={(e) => setSpecialNotes(e.target.value)}
-              placeholder="Anything we should know…"
-            />
-          </label>
-        </div>
-      )}
-        </motion.div>
-      </AnimatePresence>
-
-      {error && (
-        <p className="mt-4 font-app-sans text-sm text-rose-700">{error}</p>
-      )}
-
-      <div className="mt-8 flex gap-3">
-        {step > 0 && (
-          <button
-            type="button"
-            onClick={() => setStep((s) => s - 1)}
-            disabled={generating}
-            className="app-btn app-btn-ghost w-auto! min-w-22 shrink-0 flex-none"
+      <div className="flex-1 overflow-y-auto px-5 pb-28 pt-2">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={step}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </button>
-        )}
-        {step < 2 ? (
-          <button
-            type="button"
-            onClick={() => setStep((s) => s + 1)}
-            className="app-btn app-btn-ink flex-1"
-          >
-            Continue
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        ) : (
-          <button
-            type="button"
-            disabled={generating}
-            onClick={() => onGenerate(buildInput())}
-            className="app-btn app-btn-atlantic flex-1"
-          >
-            {generating ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Generating…
-              </>
-            ) : (
-              <>
-                Generate blueprint
-                <ArrowRight className="h-4 w-4" />
-              </>
+            {step === 0 && (
+              <div className="space-y-5">
+                <h2 className="font-app-display text-3xl text-ink">What are you planning?</h2>
+                <div className="grid gap-3">
+                  <Choice
+                    active={eventType === 'overseas'}
+                    title="Overseas"
+                    subtitle="Destination wedding or celebration abroad"
+                    onClick={() => setEventType('overseas')}
+                  />
+                  <Choice
+                    active={eventType === 'local'}
+                    title="Local"
+                    subtitle="Estate, resort, or city venue near you"
+                    onClick={() => setEventType('local')}
+                  />
+                </div>
+              </div>
             )}
-          </button>
+
+            {step === 1 && (
+              <div className="space-y-5">
+                <h2 className="font-app-display text-3xl text-ink">Place & scale</h2>
+                {eventType === 'overseas' ? (
+                  <ChipRow
+                    label="Focus"
+                    options={[
+                      { value: 'wedding_ceremony', label: 'Ceremony' },
+                      { value: 'air_ticket', label: 'Travel' },
+                      { value: 'hotel', label: 'Stays' },
+                      { value: 'concierge', label: 'Concierge' },
+                    ]}
+                    value={overseasCategory}
+                    onChange={(v) => setOverseasCategory(v as OverseasCategory)}
+                  />
+                ) : (
+                  <ChipRow
+                    label="Venue mood"
+                    options={[
+                      { value: 'resort', label: 'Resort' },
+                      { value: 'beach', label: 'Beach' },
+                      { value: 'hotel', label: 'Hotel' },
+                      { value: 'restaurant', label: 'Dining' },
+                    ]}
+                    value={localCategory}
+                    onChange={(v) => setLocalCategory(v as LocalCategory)}
+                  />
+                )}
+                <label className="block space-y-1.5">
+                  <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Location</span>
+                  <input
+                    className="app-input"
+                    value={locationName}
+                    onChange={(e) => setLocationName(e.target.value)}
+                    placeholder={eventType === 'overseas' ? 'e.g. Santorini' : 'e.g. Cotswolds estate'}
+                  />
+                </label>
+                {eventType === 'local' && (
+                  <NearbyVenueChips
+                    countryName={nearby.countryName}
+                    venues={nearby.venues}
+                    selectedName={locationName}
+                    filterCategory={localCategory}
+                    loading={nearby.loading}
+                    onSelect={(v) => {
+                      setLocationName(v.name);
+                      setLocalCategory(venueToLocalCategory(v.localCategory));
+                    }}
+                  />
+                )}
+                <label className="block space-y-1.5">
+                  <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">
+                    Guests · {guestCount}
+                  </span>
+                  <input
+                    type="range"
+                    min={20}
+                    max={400}
+                    step={10}
+                    value={guestCount}
+                    onChange={(e) => setGuestCount(Number(e.target.value))}
+                    className="w-full accent-atlantic"
+                  />
+                </label>
+                <label className="block space-y-1.5">
+                  <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Target month</span>
+                  <select
+                    className="app-input"
+                    value={targetMonth}
+                    onChange={(e) => setTargetMonth(e.target.value)}
+                  >
+                    {MONTHS.map((m) => (
+                      <option key={m} value={m}>{m}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="space-y-5">
+                <h2 className="font-app-display text-3xl text-ink">Tone & table</h2>
+                <ChipRow
+                  label="Catering"
+                  options={CATERING}
+                  value={cateringStyle}
+                  onChange={(v) => setCateringStyle(v as CateringStyle)}
+                />
+                <ChipRow
+                  label="Voice"
+                  options={STYLES}
+                  value={messageStyle}
+                  onChange={(v) => setMessageStyle(v as MessageStyle)}
+                />
+                <label className="block space-y-1.5">
+                  <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Notes</span>
+                  <textarea
+                    className="app-input min-h-24 resize-none"
+                    rows={3}
+                    value={specialNotes}
+                    onChange={(e) => setSpecialNotes(e.target.value)}
+                    placeholder="Anything we should know…"
+                  />
+                </label>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {error && (
+          <p className="mt-4 font-app-sans text-sm text-rose-700">{error}</p>
         )}
+      </div>
+
+      <div
+        className="sticky z-10 border-t border-ink/8 bg-paper/95 px-5 py-3 backdrop-blur-md"
+        style={{ bottom: 'calc(4.25rem + env(safe-area-inset-bottom, 0px))' }}
+      >
+        <div className="flex gap-3">
+          {step > 0 && (
+            <button
+              type="button"
+              onClick={() => setStep((s) => s - 1)}
+              disabled={generating}
+              className="app-btn app-btn-ghost w-auto! min-w-22 shrink-0 flex-none"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </button>
+          )}
+          {step < 2 ? (
+            <button
+              type="button"
+              onClick={() => setStep((s) => s + 1)}
+              className="app-btn app-btn-ink flex-1"
+            >
+              Continue
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={generating}
+              onClick={() => onGenerate(buildInput())}
+              className="app-btn app-btn-atlantic flex-1"
+            >
+              {generating ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Generating…
+                </>
+              ) : (
+                <>
+                  Generate blueprint
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Eye, EyeOff, Fingerprint, Heart, LogOut, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Fingerprint, Heart, LogOut } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 import { AppleMark, GoogleMark } from '../components/SocialMarks';
 import {
@@ -620,44 +620,18 @@ export default function ClubScreen() {
         <h1 className="font-app-display text-2xl tracking-tight">
           Welcome{user.name ? `, ${user.name.split(' ')[0]}` : ''}
         </h1>
-        <p className="mt-1 font-app-sans text-sm text-ink/55">
-          Track your consult, vault, and account — guests and wishlist stay one tap away.
+        <p className="mt-1 font-app-sans text-sm text-ink/50">
+          Consult, vault, and account — more tools under More.
         </p>
       </header>
 
-      <div className="space-y-6 px-5 py-6 pb-12">
-        <div className="rounded-xl border border-ink/10 bg-linear-to-br from-atlantic/12 to-transparent px-5 py-5">
-          <div className="flex items-center gap-2 text-atlantic">
-            <Sparkles className="h-4 w-4" />
-            <span className="font-app-sans text-[11px] tracking-[0.18em] uppercase">Planning credit</span>
-          </div>
-          <p className="mt-2 font-app-display text-4xl tracking-tight">{points.toLocaleString()} pts</p>
-          <p className="mt-1 font-app-sans text-sm text-ink/55">
-            ≈ ${credit} toward planning · 100 pts = $1
-          </p>
-        </div>
+      <div className="space-y-5 px-5 py-6 pb-12">
+        <p className="font-app-sans text-sm text-ink/55">
+          <span className="font-app-display text-2xl text-ink">{points.toLocaleString()}</span>
+          {' '}pts · ≈ ${credit} credit
+        </p>
 
-        <div className="flex gap-0 overflow-x-auto border-b border-ink/8">
-          {(
-            [
-              ['status', 'Consult'],
-              ['vault', 'Vault'],
-              ['settings', 'Account'],
-              ['guests', 'Guests'],
-              ['wishlist', 'Wishlist'],
-              ['overview', 'Activity'],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setPane(id)}
-              className={`app-mode-tab shrink-0 flex-none! px-3 ${pane === id ? 'app-mode-tab-active' : ''}`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <ClubPaneNav pane={pane} onChange={setPane} />
 
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
@@ -1029,5 +1003,80 @@ function PasswordField({
         </button>
       </span>
     </label>
+  );
+}
+
+const PRIMARY_PANES = [
+  ['status', 'Consult'],
+  ['vault', 'Vault'],
+  ['settings', 'Account'],
+] as const;
+
+const MORE_PANES = [
+  ['guests', 'Guests'],
+  ['wishlist', 'Wishlist'],
+  ['overview', 'Activity'],
+] as const;
+
+function ClubPaneNav({
+  pane,
+  onChange,
+}: {
+  pane: ClubPane;
+  onChange: (pane: ClubPane) => void;
+}) {
+  const moreActive = MORE_PANES.some(([id]) => id === pane);
+  const [moreOpen, setMoreOpen] = useState(moreActive);
+
+  useEffect(() => {
+    if (moreActive) setMoreOpen(true);
+  }, [moreActive]);
+
+  return (
+    <div className="space-y-2">
+      <div className="flex gap-0 border-b border-ink/8">
+        {PRIMARY_PANES.map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => {
+              setMoreOpen(false);
+              onChange(id);
+            }}
+            className={`app-mode-tab shrink-0 flex-none! px-3 ${pane === id ? 'app-mode-tab-active' : ''}`}
+          >
+            {label}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={() => {
+            setMoreOpen((o) => !o);
+            if (!moreActive) onChange('guests');
+          }}
+          className={`app-mode-tab shrink-0 flex-none! px-3 ${moreActive ? 'app-mode-tab-active' : ''}`}
+        >
+          More
+        </button>
+      </div>
+      {moreOpen ? (
+        <div className="flex gap-2">
+          {MORE_PANES.map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => onChange(id)}
+              className={`rounded-lg px-3 py-1.5 font-app-sans text-xs font-medium transition-colors ${
+                pane === id
+                  ? 'bg-ink text-paper'
+                  : 'bg-ink/5 text-ink/55 hover:bg-ink/8'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }

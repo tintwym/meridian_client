@@ -36,8 +36,8 @@ export default function Header({ onPlanClick, onBookClick, overHero = true }: He
   const onDark = overHero && !isScrolled;
   const navLinks = [
     { name: 'Portfolio', href: '#portfolio' },
-    { name: 'Plan', href: '#designer-section' },
     { name: 'Booking', href: '#booking' },
+    { name: 'About', href: '#about-planner' },
     { name: 'FAQ', href: '#faq' },
   ];
 
