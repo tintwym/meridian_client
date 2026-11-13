@@ -18,8 +18,8 @@ body {
 }
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-app-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-app-display: "Fraunces", Georgia, serif;

@@ -204,18 +204,18 @@ export default function PackageStudio({
   return (
     <div
       id="package-studio"
-      className="glass-panel rounded-2xl border border-navy/10 p-6 md:p-8 space-y-6 shadow-sm print:shadow-none"
+      className="glass-panel rounded-2xl border border-ink/10 p-6 md:p-8 space-y-6 shadow-sm print:shadow-none"
     >
-      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b border-navy/10 pb-4">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b border-ink/10 pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Layers className="w-4 h-4 text-sage" />
-            <h3 className="text-[11px] uppercase tracking-wider font-bold text-navy">
+            <Layers className="w-4 h-4 text-atlantic" />
+            <h3 className="text-[11px] uppercase tracking-wider font-bold text-ink">
               Package Studio
             </h3>
           </div>
-          <p className="font-serif text-xl text-navy">{plan.title}</p>
-          <p className="text-xs text-slate mt-1">
+          <p className="font-app-display text-xl text-ink">{plan.title}</p>
+          <p className="text-xs text-ink/55 mt-1">
             Seeded from your AI proposal · {place} · {targetMonth}
           </p>
         </div>
@@ -224,94 +224,94 @@ export default function PackageStudio({
           <button
             type="button"
             onClick={handleIcs}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-navy/10 text-[10px] uppercase tracking-wider font-bold text-navy hover:bg-champagne"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-ink/10 text-[10px] uppercase tracking-wider font-bold text-ink hover:bg-paper"
           >
-            <Calendar className="w-3.5 h-3.5 text-sage" /> ICS
+            <Calendar className="w-3.5 h-3.5 text-atlantic" /> ICS
           </button>
           <button
             type="button"
             onClick={handleAgendaTxt}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-navy/10 text-[10px] uppercase tracking-wider font-bold text-navy hover:bg-champagne"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-ink/10 text-[10px] uppercase tracking-wider font-bold text-ink hover:bg-paper"
           >
-            <Download className="w-3.5 h-3.5 text-sage" /> Agenda
+            <Download className="w-3.5 h-3.5 text-atlantic" /> Agenda
           </button>
           <button
             type="button"
             onClick={handlePdf}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-navy/10 text-[10px] uppercase tracking-wider font-bold text-navy hover:bg-champagne"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-ink/10 text-[10px] uppercase tracking-wider font-bold text-ink hover:bg-paper"
           >
-            <FileText className="w-3.5 h-3.5 text-sage" /> PDF / Print
+            <FileText className="w-3.5 h-3.5 text-atlantic" /> PDF / Print
           </button>
           <button
             type="button"
             onClick={() => downloadPackagePdfFile(plan.title, lines, place)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-navy/10 text-[10px] uppercase tracking-wider font-bold text-navy hover:bg-champagne"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-ink/10 text-[10px] uppercase tracking-wider font-bold text-ink hover:bg-paper"
           >
-            <Download className="w-3.5 h-3.5 text-sage" /> Text PDF
+            <Download className="w-3.5 h-3.5 text-atlantic" /> Text PDF
           </button>
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-navy/10 text-[10px] uppercase tracking-wider font-bold text-navy hover:bg-champagne"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full border border-ink/10 text-[10px] uppercase tracking-wider font-bold text-ink hover:bg-paper"
           >
-            <Printer className="w-3.5 h-3.5 text-sage" /> Print
+            <Printer className="w-3.5 h-3.5 text-atlantic" /> Print
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="rounded-xl bg-champagne border border-navy/10 p-3">
-          <p className="text-[9px] uppercase tracking-wider font-mono text-slate">Events</p>
-          <p className="font-mono text-lg font-bold text-navy">
+        <div className="rounded-xl bg-paper border border-ink/10 p-3">
+          <p className="text-[9px] uppercase tracking-wider font-app-sans text-ink/55">Events</p>
+          <p className="font-app-sans text-lg font-bold text-ink">
             ${totals.eventsTotal.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-xl bg-champagne border border-navy/10 p-3">
-          <p className="text-[9px] uppercase tracking-wider font-mono text-slate">Experiences</p>
-          <p className="font-mono text-lg font-bold text-navy">
+        <div className="rounded-xl bg-paper border border-ink/10 p-3">
+          <p className="text-[9px] uppercase tracking-wider font-app-sans text-ink/55">Experiences</p>
+          <p className="font-app-sans text-lg font-bold text-ink">
             ${totals.experiencesTotal.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-xl bg-champagne border border-navy/10 p-3">
-          <p className="text-[9px] uppercase tracking-wider font-mono text-slate">Stays</p>
-          <p className="font-mono text-lg font-bold text-navy">
+        <div className="rounded-xl bg-paper border border-ink/10 p-3">
+          <p className="text-[9px] uppercase tracking-wider font-app-sans text-ink/55">Stays</p>
+          <p className="font-app-sans text-lg font-bold text-ink">
             ${totals.staysTotal.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-xl bg-champagne border border-navy/10 p-3">
-          <p className="text-[9px] uppercase tracking-wider font-mono text-slate">Transfers</p>
-          <p className="font-mono text-lg font-bold text-navy">
+        <div className="rounded-xl bg-paper border border-ink/10 p-3">
+          <p className="text-[9px] uppercase tracking-wider font-app-sans text-ink/55">Transfers</p>
+          <p className="font-app-sans text-lg font-bold text-ink">
             ${totals.transfersTotal.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-xl bg-champagne border border-navy/10 p-3">
-          <p className="text-[9px] uppercase tracking-wider font-mono text-slate">Grand Total</p>
-          <p className="font-mono text-lg font-bold text-navy">
+        <div className="rounded-xl bg-paper border border-ink/10 p-3">
+          <p className="text-[9px] uppercase tracking-wider font-app-sans text-ink/55">Grand Total</p>
+          <p className="font-app-sans text-lg font-bold text-ink">
             ${totals.grandTotal.toLocaleString()}
           </p>
         </div>
-        <div className="rounded-xl bg-navy text-champagne p-3">
-          <p className="text-[9px] uppercase tracking-wider font-mono text-champagne/70">
+        <div className="rounded-xl bg-ink text-paper p-3">
+          <p className="text-[9px] uppercase tracking-wider font-app-sans text-paper/70">
             Deposit 25%
           </p>
-          <p className="font-mono text-lg font-bold">${totals.deposit.toLocaleString()}</p>
+          <p className="font-app-sans text-lg font-bold">${totals.deposit.toLocaleString()}</p>
         </div>
       </div>
 
-      <div className="flex gap-0 overflow-x-auto border-b border-navy/10">
+      <div className="flex gap-0 overflow-x-auto border-b border-ink/10">
         {tabs.map((t) => (
           <button
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
             className={`relative shrink-0 px-3 py-2.5 text-[10px] font-bold tracking-wider uppercase transition-colors duration-200 ${
-              tab === t.id ? 'text-navy' : 'text-slate hover:text-navy'
+              tab === t.id ? 'text-ink' : 'text-ink/55 hover:text-ink'
             }`}
           >
             {t.label}
             <span
               className={`absolute inset-x-2 bottom-0 h-0.5 transition-colors duration-200 ${
-                tab === t.id ? 'bg-sage' : 'bg-transparent'
+                tab === t.id ? 'bg-atlantic' : 'bg-transparent'
               }`}
             />
           </button>
@@ -394,33 +394,33 @@ export default function PackageStudio({
             initialMessage={`${plan.title} — ${plan.tagline}\nLocation: ${plan.location}\nAI budget note: ${plan.estimatedBudgetRange}`}
           />
           <div className="space-y-4">
-            <div className="rounded-2xl border border-navy/10 bg-champagne/50 p-5 space-y-3">
+            <div className="rounded-2xl border border-ink/10 bg-paper/50 p-5 space-y-3">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-sage" />
-                <h4 className="text-[11px] uppercase tracking-wider font-bold text-navy">
+                <Sparkles className="w-4 h-4 text-atlantic" />
+                <h4 className="text-[11px] uppercase tracking-wider font-bold text-ink">
                   Next step
                 </h4>
               </div>
-              <p className="text-xs text-slate leading-relaxed">
+              <p className="text-xs text-ink/55 leading-relaxed">
                 Export ICS or PDF, send a mailto inquiry with the full package, or continue to a live
                 planner consult with your proposal context.
               </p>
               <button
                 type="button"
                 onClick={handlePdf}
-                className="w-full py-3 border border-navy/15 text-navy text-[10px] uppercase tracking-widest font-bold rounded-full hover:bg-white transition-colors"
+                className="w-full py-3 border border-ink/15 text-ink text-[10px] uppercase tracking-widest font-bold rounded-full hover:bg-white transition-colors"
               >
                 Download package PDF
               </button>
               <button
                 type="button"
                 onClick={() => onRequestConsult?.(plan)}
-                className="w-full py-3 bg-navy hover:bg-sage text-white text-[10px] uppercase tracking-widest font-bold rounded-full transition-colors"
+                className="w-full py-3 bg-ink hover:bg-atlantic text-white text-[10px] uppercase tracking-widest font-bold rounded-full transition-colors"
               >
                 Talk to a Planner
               </button>
             </div>
-            <pre className="text-[10px] text-slate bg-white border border-navy/10 rounded-xl p-4 max-h-56 overflow-auto whitespace-pre-wrap font-mono">
+            <pre className="text-[10px] text-ink/55 bg-white border border-ink/10 rounded-xl p-4 max-h-56 overflow-auto whitespace-pre-wrap font-app-sans">
               {buildAgendaPlainText(plan.title, lines)}
             </pre>
           </div>

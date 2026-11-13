@@ -10,13 +10,9 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import Header from './components/Header';
-import QuickMatch from './components/QuickMatch';
-import CoreOfferings from './components/CoreOfferings';
-import Personalization from './components/Personalization';
 import Designer from './components/Designer';
 import { HeroSection } from './components/landing/HeroSection';
 import { PortfolioGallery } from './components/landing/PortfolioGallery';
-import { ServicesCalculator } from './components/landing/ServicesCalculator';
 import { BookingCalendar } from './components/landing/BookingCalendar';
 import { AboutPlanner } from './components/landing/AboutPlanner';
 import { TestimonialsSection } from './components/landing/TestimonialsSection';
@@ -35,14 +31,14 @@ export default function MarketingApp() {
   const [prefill, setPrefill] = useState<DesignerPrefill | null>(null);
   const [prefillKey, setPrefillKey] = useState(0);
   const [leadMagnetOpen, setLeadMagnetOpen] = useState(false);
-  const [selectedResource, setSelectedResource] = useState('2026 High-Society Destination Guide');
+  const [selectedResource, setSelectedResource] = useState('2026 Destination Planning Guide');
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     location: 'Santorini',
     date: '',
-    budget: 'Heritage Premium ($30k - $75k)',
+    budget: '$30k – $75k',
     vision: '',
   });
 
@@ -128,22 +124,6 @@ export default function MarketingApp() {
 
         <PortfolioGallery />
 
-        <BookingCalendar />
-
-        <AboutPlanner
-          onOpenBooking={openBooking}
-          onOpenLeadMagnet={() => openLeadMagnet('2026 Destination Planning Guide')}
-        />
-
-        <TestimonialsSection />
-
-        {/* Tools after the convert path */}
-        <QuickMatch onContinueToDesigner={(data) => openDesigner(data)} />
-
-        <CoreOfferings onUseInDesigner={(data) => openDesigner(data)} />
-
-        <Personalization />
-
         <Designer
           prefill={prefill}
           prefillKey={prefillKey}
@@ -161,18 +141,21 @@ export default function MarketingApp() {
           onRequestConsult={(plan) => openLeadModal(plan)}
         />
 
-        <ServicesCalculator
-          onSelectPackage={() => {
-            openBooking();
-          }}
+        <BookingCalendar />
+
+        <AboutPlanner
+          onOpenBooking={openBooking}
+          onOpenLeadMagnet={() => openLeadMagnet('2026 Destination Planning Guide')}
         />
+
+        <TestimonialsSection />
 
         <FaqSection onOpenBooking={openBooking} />
       </main>
 
       <Footer
         onOpenBooking={openBooking}
-        onOpenLeadMagnet={() => openLeadMagnet('2026 High-Society Destination Guide')}
+        onOpenLeadMagnet={() => openLeadMagnet('2026 Destination Planning Guide')}
         onNavigate={scrollToSection}
       />
 
@@ -216,14 +199,14 @@ export default function MarketingApp() {
                 {!modalFormSubmitted ? (
                   <form onSubmit={handleFormSubmit} className="space-y-5">
                     <div className="space-y-1">
-                      <span className="text-[9px] font-app-sans uppercase tracking-[0.3em] text-atlantic flex items-center gap-1">
-                        <Sparkles className="w-3.5 h-3.5" /> Curate Your Blueprint
+                      <span className="text-[11px] font-app-sans uppercase tracking-[0.18em] text-atlantic flex items-center gap-1">
+                        <Sparkles className="w-3.5 h-3.5" /> Consult request
                       </span>
                       <h3 className="font-app-display text-2xl md:text-3xl font-semibold text-ink tracking-tight leading-none">
-                        Plan Your Event
+                        Talk to a planner
                       </h3>
-                      <p className="text-ink/55 text-xs leading-relaxed pt-1">
-                        Share your vision. If you generated a proposal, we attach a short summary for your planner.
+                      <p className="text-ink/55 text-sm leading-relaxed pt-1">
+                        Share a few details. If you already built a proposal, we attach a short summary.
                       </p>
                     </div>
 
@@ -317,18 +300,15 @@ export default function MarketingApp() {
                     <button
                       type="submit"
                       disabled={leadSubmitting}
-                      className="w-full bg-ink hover:bg-atlantic text-paper font-app-sans text-[10px] uppercase tracking-[0.2em] py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 font-semibold disabled:opacity-60"
+                      className="w-full bg-ink hover:bg-atlantic text-paper font-app-sans text-sm py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 font-semibold disabled:opacity-60"
                     >
-                      <span>{leadSubmitting ? 'Submitting…' : 'Submit Intention Form'}</span>
+                      <span>{leadSubmitting ? 'Submitting…' : 'Send request'}</span>
                       <Send className="w-3.5 h-3.5" />
                     </button>
 
-                    <div className="flex items-center justify-center space-x-4 pt-3 border-t border-ink/8 text-[10px] text-ink/45 font-app-sans uppercase">
-                      <span className="flex items-center gap-1">
-                        <ShieldCheck className="w-4 h-4 text-atlantic" /> Fully Bonded
-                      </span>
-                      <span>·</span>
-                      <span>100% Confidential</span>
+                    <div className="flex items-center justify-center gap-2 pt-3 border-t border-ink/8 text-xs text-ink/45 font-app-sans">
+                      <ShieldCheck className="w-4 h-4 text-atlantic" />
+                      <span>Private — only your planner team sees this</span>
                     </div>
                   </form>
                 ) : (
@@ -341,14 +321,13 @@ export default function MarketingApp() {
                       <CheckCircle2 className="w-16 h-16 text-atlantic" />
                     </div>
                     <div className="space-y-2">
-                      <span className="text-[9px] font-app-sans uppercase tracking-[0.3em] text-atlantic block">
-                        Intention Logged Successfully
+                      <span className="text-[11px] font-app-sans uppercase tracking-[0.18em] text-atlantic block">
+                        Request received
                       </span>
-                      <h4 className="font-app-display text-2xl font-bold text-ink">Thank You, {formData.name}</h4>
-                      <p className="text-ink/55 text-xs leading-relaxed max-w-sm mx-auto">
-                        Your celebration blueprint at{' '}
-                        <span className="font-semibold text-ink">{formData.location}</span> has been compiled. A lead
-                        planner will follow up at{' '}
+                      <h4 className="font-app-display text-2xl font-bold text-ink">Thank you, {formData.name}</h4>
+                      <p className="text-ink/55 text-sm leading-relaxed max-w-sm mx-auto">
+                        We&apos;ll follow up about{' '}
+                        <span className="font-semibold text-ink">{formData.location}</span> at{' '}
                         <span className="font-semibold text-ink">{formData.email}</span>.
                       </p>
                       {leadMessage && (
@@ -358,9 +337,9 @@ export default function MarketingApp() {
                     <button
                       type="button"
                       onClick={() => setIsModalOpen(false)}
-                      className="bg-ink text-paper font-app-sans text-[10px] uppercase tracking-widest px-8 py-3 rounded-xl hover:bg-atlantic transition-colors"
+                      className="bg-ink text-paper font-app-sans text-sm px-8 py-3 rounded-xl hover:bg-atlantic transition-colors"
                     >
-                      Return to Meridian
+                      Back to Meridian
                     </button>
                   </motion.div>
                 )}

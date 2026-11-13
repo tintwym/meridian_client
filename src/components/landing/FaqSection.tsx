@@ -49,7 +49,7 @@ const FAQ_ITEMS: FaqItem[] = [
     category: 'Investment',
     question: 'What is the deposit to secure a date?',
     answer:
-      'A 30% deposit on signing reserves your date. The balance is scheduled in installments, with final payment due 30 days before the event.',
+      'After your strategy call, we send a clear proposal. A deposit on signing reserves your date; the balance follows a simple installment schedule agreed with your planner.',
   },
 ];
 

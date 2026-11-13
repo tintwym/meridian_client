@@ -229,7 +229,7 @@ export const PortfolioGallery: React.FC = () => {
 
               {/* Theme Swatches */}
               <div className="space-y-2">
-                <h4 className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Curated Color Palette:</h4>
+                <h4 className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">Palette</h4>
                 <div className="flex items-center gap-3">
                   {activeItem.themePalette.map((hex, idx) => (
                     <div key={idx} className="flex items-center gap-2">

@@ -28,30 +28,6 @@ export interface TimeSlot {
   available: boolean;
 }
 
-export interface BookingFormData {
-  eventType: string;
-  guestCount: number;
-  budgetRange: string;
-  selectedDate: string;
-  selectedTimeSlot: string;
-  consultationType: 'Virtual Zoom' | 'In-Person Studio' | 'On-Site Venue';
-  clientName: string;
-  clientEmail: string;
-  clientPhone: string;
-  eventLocation: string;
-  specialRequests: string;
-}
-
-export interface ServicePackage {
-  id: string;
-  name: string;
-  tagline: string;
-  startingPrice: number;
-  recommendedFor: string;
-  features: string[];
-  popular?: boolean;
-}
-
 export interface Testimonial {
   id: string;
   clientName: string;

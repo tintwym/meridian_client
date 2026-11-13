@@ -75,10 +75,10 @@ export function mountPlatformRoutes(app: Express) {
   app.use(cors);
   app.use(auth);
 
-  app.post('/api/admin/login', authLoginLimit, (req, res) => {
+  app.post('/api/admin/login', authLoginLimit, async (req, res) => {
     try {
       const { email, password } = req.body || {};
-      const result = store.adminLoginFlexible(
+      const result = await store.adminLoginFlexible(
         typeof email === 'string' ? email : undefined,
         password || '',
       );
@@ -89,10 +89,10 @@ export function mountPlatformRoutes(app: Express) {
     }
   });
 
-  app.post('/api/admin/register', (req, res) => {
+  app.post('/api/admin/register', async (req, res) => {
     try {
       const { name, email, password, inviteCode } = req.body || {};
-      const result = store.registerAdmin({
+      const result = await store.registerAdmin({
         name: name || '',
         email: email || '',
         password: password || '',
@@ -161,17 +161,27 @@ export function mountPlatformRoutes(app: Express) {
   });
 
   app.get('/api/platform/health', (_req, res) => {
+    const supabase = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY);
+    const adminPassword = Boolean(process.env.ADMIN_PASSWORD);
+    const otpEmail = Boolean(process.env.RESEND_API_KEY && process.env.OTP_FROM_EMAIL);
+    const authSecret = Boolean((process.env.AUTH_SECRET || '').trim());
+    const isProd = process.env.NODE_ENV === 'production';
+    /** Process is up (`ok`); launch-ready when prod essentials are set. */
+    const ready = !isProd || (supabase && adminPassword && otpEmail && authSecret);
+
     const payload: Record<string, unknown> = {
       ok: true,
       product: 'Meridian Atelier',
       clients: ['web', 'ios', 'android', 'admin'],
       club: store.clubPointRules,
+      ready,
     };
-    if (process.env.NODE_ENV !== 'production') {
+    if (!isProd || !ready) {
       payload.config = {
-        supabase: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY),
-        adminPassword: Boolean(process.env.ADMIN_PASSWORD),
-        otpEmail: Boolean(process.env.RESEND_API_KEY && process.env.OTP_FROM_EMAIL),
+        supabase,
+        adminPassword,
+        otpEmail,
+        authSecret,
       };
     }
     res.json(payload);

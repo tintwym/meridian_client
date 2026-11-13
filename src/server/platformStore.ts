@@ -482,12 +482,22 @@ function readPayload<T>(token: string): T | null {
   }
 }
 
-/** Request a 6-digit email OTP. Emails when RESEND is configured; otherwise returns devCode. */
+/** Request a 6-digit email OTP. Production requires Resend; never returns the code in the response body unless OTP_EXPOSE_CODE=1. */
 export async function requestEmailOtp(email: string) {
   const normalized = email.trim().toLowerCase();
   if (!normalized || !normalized.includes('@')) {
     throw Object.assign(new Error('Valid email required'), { status: 400 });
   }
+
+  const isProd = process.env.NODE_ENV === 'production';
+  const { isOtpEmailConfigured, sendOtpEmail } = await import('../lib/otpEmail');
+  if (isProd && !isOtpEmailConfigured()) {
+    throw Object.assign(
+      new Error('Email verification is not configured (set RESEND_API_KEY and OTP_FROM_EMAIL)'),
+      { status: 503 },
+    );
+  }
+
   const code = String(crypto.randomInt(100000, 999999));
   const expiresAt = Date.now() + OTP_TTL_MS;
   const record: OtpRecord = {
@@ -500,19 +510,25 @@ export async function requestEmailOtp(email: string) {
   await persistOtp(normalized, record.codeHash, record.expiresAt, record.attempts);
 
   const otpTicket = signPayload({ e: normalized, h: hashOtp(code), x: expiresAt });
-  if (process.env.NODE_ENV !== 'production' || process.env.OTP_EXPOSE_CODE === '1') {
+  if (!isProd || process.env.OTP_EXPOSE_CODE === '1') {
     console.log(`[Meridian OTP] ${normalized} → ${code}`);
   }
 
   let emailed = false;
   try {
-    const { sendOtpEmail } = await import('../lib/otpEmail');
     emailed = await sendOtpEmail(normalized, code);
   } catch (err) {
     warnSupabase('otp email', err);
   }
 
-  const exposeCode = process.env.OTP_EXPOSE_CODE === '1' || (!emailed && process.env.NODE_ENV !== 'production');
+  if (isProd && !emailed) {
+    throw Object.assign(
+      new Error('Could not send verification email. Try again shortly.'),
+      { status: 502 },
+    );
+  }
+
+  const exposeCode = process.env.OTP_EXPOSE_CODE === '1' || (!emailed && !isProd);
 
   return {
     ok: true,
@@ -1284,7 +1300,7 @@ function hydrateAdminUsers() {
       }
     }
   } catch {
-    // missing or unreadable — start empty
+    // missing or unreadable — start empty (Supabase hydrate runs async on demand)
   }
   try {
     const raw = fs.readFileSync(adminSessionsPath(), 'utf8');
@@ -1298,11 +1314,12 @@ function hydrateAdminUsers() {
       }
     }
   } catch {
-    // optional
+    // optional local cache — signed tokens do not require this file
   }
 }
 
 function persistAdminUsers() {
+  // Local file is a dev convenience; serverless FS is ephemeral.
   try {
     const dir = path.dirname(adminDataPath());
     fs.mkdirSync(dir, { recursive: true });
@@ -1310,7 +1327,27 @@ function persistAdminUsers() {
       mode: 0o644,
     });
   } catch (err) {
-    console.error('[admin] could not persist admin users:', err instanceof Error ? err.message : err);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('[admin] could not persist admin users to disk:', err instanceof Error ? err.message : err);
+    }
+  }
+  for (const user of adminUsers.values()) {
+    void persistAdminUserRemote(user);
+  }
+}
+
+async function persistAdminUserRemote(user: AdminUserRecord) {
+  try {
+    const { upsertAdminRemote } = await import('../lib/clubPlatformSupabase');
+    await upsertAdminRemote({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      passwordHash: user.passwordHash,
+      createdAt: user.createdAt,
+    });
+  } catch (err) {
+    warnSupabase('persist admin user', err);
   }
 }
 
@@ -1328,11 +1365,35 @@ function persistAdminSessions() {
   }
 }
 
-function findAdminByEmail(email: string) {
+function findAdminByEmailCached(email: string) {
   hydrateAdminUsers();
   const normalized = email.trim().toLowerCase();
   for (const u of adminUsers.values()) {
     if (u.email === normalized) return u;
+  }
+  return undefined;
+}
+
+async function findAdminByEmail(email: string) {
+  const normalized = email.trim().toLowerCase();
+  const cached = findAdminByEmailCached(normalized);
+  if (cached) return cached;
+  try {
+    const { getAdminByEmailRemote } = await import('../lib/clubPlatformSupabase');
+    const remote = await getAdminByEmailRemote(normalized);
+    if (remote) {
+      const user: AdminUserRecord = {
+        id: remote.id,
+        email: remote.email,
+        name: remote.name,
+        passwordHash: remote.passwordHash,
+        createdAt: remote.createdAt,
+      };
+      adminUsers.set(user.id, user);
+      return user;
+    }
+  } catch (err) {
+    warnSupabase('admin email lookup', err);
   }
   return undefined;
 }
@@ -1371,10 +1432,10 @@ export function adminLogin(password: string) {
  * Planner email login, with fallback to shared ADMIN_PASSWORD when no account matches.
  * Lets the UI always send email+password without blocking ops who only set ADMIN_PASSWORD.
  */
-export function adminLoginFlexible(email: string | undefined, password: string) {
+export async function adminLoginFlexible(email: string | undefined, password: string) {
   const normalized = (email || '').trim().toLowerCase();
   if (normalized && EMAIL_RE.test(normalized)) {
-    const found = findAdminByEmail(normalized);
+    const found = await findAdminByEmail(normalized);
     if (found) {
       if (!password || password.length < 8) {
         throw Object.assign(new Error('Password must be at least 8 characters'), { status: 400 });
@@ -1390,11 +1451,11 @@ export function adminLoginFlexible(email: string | undefined, password: string) 
 }
 
 /** @deprecated Prefer adminLoginFlexible — kept for password-only callers. */
-export function adminLoginAccount(email: string, password: string) {
+export async function adminLoginAccount(email: string, password: string) {
   return adminLoginFlexible(email, password);
 }
 
-export function registerAdmin(opts: {
+export async function registerAdmin(opts: {
   name: string;
   email: string;
   password: string;
@@ -1426,7 +1487,7 @@ export function registerAdmin(opts: {
   if (!crypto.timingSafeEqual(inviteHash, expectedHash)) {
     throw Object.assign(new Error('Invalid invite code'), { status: 403 });
   }
-  if (findAdminByEmail(email)) {
+  if (await findAdminByEmail(email)) {
     throw Object.assign(new Error('An admin account with this email already exists'), { status: 409 });
   }
 
@@ -1439,6 +1500,7 @@ export function registerAdmin(opts: {
   };
   adminUsers.set(user.id, user);
   persistAdminUsers();
+  await persistAdminUserRemote(user);
   const issued = issueAdminToken(user.id);
   return { ...issued, admin: publicAdmin(user) };
 }

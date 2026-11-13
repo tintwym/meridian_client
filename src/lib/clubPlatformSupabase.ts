@@ -447,3 +447,75 @@ export async function listVaultRemote(userId: string): Promise<VaultDoc[] | null
     createdAt: row.created_at,
   }));
 }
+
+type AdminUserRow = {
+  id: string;
+  email: string;
+  name: string;
+  password_hash: string;
+  created_at: string;
+};
+
+export type AdminUserRemote = {
+  id: string;
+  email: string;
+  name: string;
+  passwordHash: string;
+  createdAt: string;
+};
+
+function adminFromRow(row: AdminUserRow): AdminUserRemote {
+  return {
+    id: row.id,
+    email: row.email,
+    name: row.name,
+    passwordHash: row.password_hash,
+    createdAt: row.created_at,
+  };
+}
+
+export async function upsertAdminRemote(user: AdminUserRemote): Promise<boolean> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase || !isSupabaseConfigured()) return false;
+  const { error } = await supabase.from('admin_users').upsert(
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      password_hash: user.passwordHash,
+      created_at: user.createdAt,
+    },
+    { onConflict: 'id' },
+  );
+  if (error) {
+    console.warn('[supabase] upsert admin_users failed:', error.message);
+    return false;
+  }
+  return true;
+}
+
+export async function listAdminsRemote(): Promise<AdminUserRemote[] | null> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase || !isSupabaseConfigured()) return null;
+  const { data, error } = await supabase.from('admin_users').select('*');
+  if (error) {
+    console.warn('[supabase] list admin_users failed:', error.message);
+    return null;
+  }
+  return (data as AdminUserRow[]).map(adminFromRow);
+}
+
+export async function getAdminByEmailRemote(email: string): Promise<AdminUserRemote | null> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase || !isSupabaseConfigured()) return null;
+  const { data, error } = await supabase
+    .from('admin_users')
+    .select('*')
+    .eq('email', email.trim().toLowerCase())
+    .maybeSingle();
+  if (error) {
+    console.warn('[supabase] get admin by email failed:', error.message);
+    return null;
+  }
+  return data ? adminFromRow(data as AdminUserRow) : null;
+}

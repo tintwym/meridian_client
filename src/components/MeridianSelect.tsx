@@ -13,7 +13,7 @@ type MeridianSelectProps<T extends string> = {
   onChange: (value: T) => void;
   label?: string;
   rounded?: 'full' | 'xl';
-  tone?: 'glass' | 'champagne';
+  tone?: 'glass' | 'champagne' | 'paper';
   className?: string;
 };
 
@@ -35,8 +35,8 @@ export default function MeridianSelect<T extends string>({
   const radius = rounded === 'full' ? 'rounded-full' : 'rounded-xl';
   const menuRadius = rounded === 'full' ? 'rounded-2xl' : 'rounded-xl';
   const triggerBg =
-    tone === 'champagne'
-      ? 'bg-champagne focus:bg-white'
+    tone === 'champagne' || tone === 'paper'
+      ? 'bg-paper focus:bg-white'
       : 'bg-white/40 focus:bg-white';
 
   useEffect(() => {
@@ -66,11 +66,11 @@ export default function MeridianSelect<T extends string>({
         aria-controls={listId}
         aria-label={label}
         onClick={() => setOpen((v) => !v)}
-        className={`relative flex h-11 w-full items-center appearance-none ${triggerBg} border border-navy/10 ${radius} pl-4 pr-10 text-xs text-navy tracking-wide font-sans text-left focus:outline-none focus:border-sage transition-colors cursor-pointer`}
+        className={`relative flex h-11 w-full items-center appearance-none ${triggerBg} border border-ink/10 ${radius} pl-4 pr-10 text-xs text-ink tracking-wide font-sans text-left focus:outline-none focus:border-atlantic transition-colors cursor-pointer`}
       >
         <span className="block min-w-0 truncate">{selected?.label}</span>
         <ChevronDown
-          className={`pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? 'rotate-180' : ''}`}
+          className={`pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-ink/55 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${open ? 'rotate-180' : ''}`}
           aria-hidden
         />
       </button>
@@ -86,7 +86,7 @@ export default function MeridianSelect<T extends string>({
             exit={{ opacity: 0, y: -4, scale: 0.98 }}
             transition={{ duration: 0.22, ease: menuEase }}
             style={{ transformOrigin: 'top center' }}
-            className={`absolute z-50 left-0 right-0 mt-2 ${menuRadius} bg-white border border-navy/10 shadow-[0_16px_40px_-12px_rgba(15,23,42,0.18)] py-1.5 overflow-hidden`}
+            className={`absolute z-50 left-0 right-0 mt-2 ${menuRadius} bg-white border border-ink/10 shadow-[0_16px_40px_-12px_rgba(15,23,42,0.18)] py-1.5 overflow-hidden`}
           >
             {options.map((opt, index) => {
               const isActive = opt.value === value;
@@ -111,12 +111,12 @@ export default function MeridianSelect<T extends string>({
                     }}
                     className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-left text-xs tracking-wide transition-colors cursor-pointer ${
                       isActive
-                        ? 'bg-sage/15 text-navy font-medium'
-                        : 'text-navy/80 hover:bg-champagne hover:text-navy'
+                        ? 'bg-atlantic/15 text-ink font-medium'
+                        : 'text-ink/80 hover:bg-paper hover:text-ink'
                     }`}
                   >
                     <span className="truncate">{opt.label}</span>
-                    {isActive && <Check className="w-3.5 h-3.5 text-sage shrink-0" aria-hidden />}
+                    {isActive && <Check className="w-3.5 h-3.5 text-atlantic shrink-0" aria-hidden />}
                   </button>
                 </motion.li>
               );

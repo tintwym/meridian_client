@@ -12,7 +12,7 @@ interface LeadMagnetModalProps {
 export function LeadMagnetModal({
   isOpen,
   onClose,
-  defaultResource = '2026 High-Society Destination Guide',
+  defaultResource = '2026 Destination Planning Guide',
 }: LeadMagnetModalProps) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -60,13 +60,13 @@ RESOURCE: ${resource}
 Prepared for: ${name || 'Valued Guest'} (${email})
 Date: ${new Date().toLocaleDateString()}
 
-DESTINATION EVENT PLANNING COMPENDIUM
+DESTINATION PLANNING NOTES
 ----------------------------------------
-1. European Villa Directory (Lake Como, Ravello, Provence)
-2. High-Society Budget Allocation Matrix (Floral, Culinary, Lighting, AV)
-3. 100-Point Vendor & Production Countdown Timeline
+1. Venue shortlist framework (local & overseas)
+2. Budget ranges for florals, catering, lighting, and AV
+3. 12-week planning countdown
 
-For questions or to schedule a private consultation:
+Questions or a planner call:
 Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
 
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
@@ -94,13 +94,13 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
             <X className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-atlantic font-app-sans mb-1">
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-atlantic font-app-sans mb-1">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Exclusive Resource</span>
+            <span>Planning guide</span>
           </div>
-          <h3 className="text-2xl font-app-display font-light text-paper">Download Planning Guide</h3>
-          <p className="text-xs text-paper/70 font-light mt-1">
-            Receive our complementary destination & budget kit.
+          <h3 className="text-2xl font-app-display font-light text-paper">Download a short guide</h3>
+          <p className="text-sm text-paper/70 mt-1">
+            Venue notes, budget ranges, and a simple countdown — free by email.
           </p>
         </div>
 
@@ -108,16 +108,16 @@ Email: ${BRAND.email.concierge} | Tel: ${BRAND.phone}`;
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1">
-                <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">Select Guide:</label>
+                <label className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase block">Guide</label>
                 <select
                   value={resource}
                   onChange={(e) => setResource(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl bg-white border border-ink/12 text-ink text-sm focus:outline-none focus:border-atlantic"
                   id="lead-modal-resource-select"
                 >
-                  <option value="2026 High-Society Destination Guide">2026 High-Society Destination Guide</option>
-                  <option value="Bespoke Event Budget & Timeline Kit">Bespoke Event Budget & Timeline Kit</option>
-                  <option value="Luxury Venue Selection Matrix">Luxury Venue Selection Matrix</option>
+                  <option value="2026 Destination Planning Guide">2026 Destination Planning Guide</option>
+                  <option value="Budget & Timeline Kit">Budget & Timeline Kit</option>
+                  <option value="Venue Selection Notes">Venue Selection Notes</option>
                 </select>
               </div>
 

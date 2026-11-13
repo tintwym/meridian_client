@@ -73,10 +73,10 @@ export default function NearbyVenueChips({
 
   return (
     <div className={`space-y-1.5 min-w-0 max-w-full ${className}`}>
-      <p className="text-[10px] font-mono uppercase tracking-[0.16em] text-slate leading-none">
+      <p className="text-[10px] font-app-sans uppercase tracking-[0.16em] text-ink/55 leading-none">
         {countryName ? `Near ${countryName}` : 'Local suggestions'}
       </p>
-      <p className="truncate text-[11px] leading-none text-slate/80">{hint}</p>
+      <p className="truncate text-[11px] leading-none text-ink/55/80">{hint}</p>
       <div className="grid grid-cols-2 gap-2 min-w-0">
         {Array.from({ length: 2 }, (_, i) => {
           const v = visible[i];
@@ -84,7 +84,7 @@ export default function NearbyVenueChips({
             return (
               <div
                 key={`slot-${i}`}
-                className="h-9 rounded-full border border-navy/8 bg-champagne/50"
+                className="h-9 rounded-full border border-ink/8 bg-paper/50"
                 aria-hidden
               />
             );
@@ -99,13 +99,13 @@ export default function NearbyVenueChips({
               onClick={() => onSelect(v)}
               className={`flex h-9 w-full min-w-0 items-center justify-center gap-1 rounded-full border px-2.5 text-[11px] font-medium transition-colors cursor-pointer ${
                 active
-                  ? 'border-navy bg-navy text-white'
-                  : 'border-navy/10 bg-white/50 text-navy hover:border-sage/40 hover:bg-white'
+                  ? 'border-ink bg-ink text-white'
+                  : 'border-ink/10 bg-white/50 text-ink hover:border-atlantic/40 hover:bg-white'
               }`}
             >
               <span className="min-w-0 truncate">{v.name}</span>
               {showBadge && (
-                <span className="shrink-0 text-[9px] font-mono uppercase tracking-wide opacity-55">
+                <span className="shrink-0 text-[9px] font-app-sans uppercase tracking-wide opacity-55">
                   {categoryLabel(v.localCategory)}
                 </span>
               )}

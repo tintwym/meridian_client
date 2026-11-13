@@ -22,7 +22,7 @@ import CommunicationSuite from '../components/CommunicationSuite';
 
 const clubEase = [0.22, 1, 0.36, 1] as const;
 
-type ClubPane = 'overview' | 'wishlist' | 'status' | 'guests' | 'vault' | 'settings';
+type ClubPane = 'status' | 'vault' | 'settings' | 'guests' | 'wishlist' | 'overview';
 
 export default function ClubScreen() {
   const {
@@ -59,7 +59,7 @@ export default function ClubScreen() {
   const [otpTicket, setOtpTicket] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [pane, setPane] = useState<ClubPane>('overview');
+  const [pane, setPane] = useState<ClubPane>('status');
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [inquiries, setInquiries] = useState<InquiryRecord[]>([]);
   const [vault, setVault] = useState<VaultDoc[]>([]);
@@ -308,109 +308,113 @@ export default function ClubScreen() {
         <div className="mx-auto max-w-md space-y-6 px-5 py-8">
           <p className="font-app-sans text-sm leading-relaxed text-ink/60">
             {mode === 'join'
-              ? 'Create your account with email and password, verify with a one-time code, then optionally add fingerprint unlock.'
-              : 'Sign in with your email and password. Use fingerprint unlock if you’ve enabled it in Settings.'}
+              ? 'Join with email and password, then confirm with a one-time code from your inbox.'
+              : 'Sign in with email and password. Fingerprint unlock is optional in Account.'}
           </p>
 
-          <div className="grid gap-2">
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => openSocial('apple')}
-              className="app-btn app-btn-ink inline-flex items-center justify-center gap-2.5"
-            >
-              <AppleMark className="h-4 w-4 shrink-0" />
-              Continue with Apple
-            </button>
-            <button
-              type="button"
-              disabled={busy}
-              onClick={() => openSocial('google')}
-              className="app-btn app-btn-ghost inline-flex items-center justify-center gap-2.5"
-            >
-              <GoogleMark className="h-4 w-4 shrink-0" />
-              Continue with Google
-            </button>
-          </div>
+          {/* Email-only social stub is for local/dev. Production builds use password + OTP until real OAuth ships. */}
+          {process.env.NODE_ENV !== 'production' && (
+            <>
+              <div className="grid gap-2">
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => openSocial('apple')}
+                  className="app-btn app-btn-ink inline-flex items-center justify-center gap-2.5"
+                >
+                  <AppleMark className="h-4 w-4 shrink-0" />
+                  Continue with Apple
+                </button>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => openSocial('google')}
+                  className="app-btn app-btn-ghost inline-flex items-center justify-center gap-2.5"
+                >
+                  <GoogleMark className="h-4 w-4 shrink-0" />
+                  Continue with Google
+                </button>
+              </div>
 
-          <AnimatePresence>
-          {socialProvider && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.22, ease: clubEase }}
-              className="fixed inset-0 z-40 flex items-end justify-center bg-ink/40 px-4 pb-8 sm:items-center sm:pb-0"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="social-sign-in-title"
-              onClick={closeSocial}
-            >
-              <motion.form
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 12 }}
-                transition={{ duration: 0.34, ease: clubEase }}
-                onSubmit={confirmSocial}
-                onClick={(ev) => ev.stopPropagation()}
-                className="w-full max-w-md space-y-4 rounded-2xl border border-ink/10 bg-paper p-5 shadow-xl"
-              >
-                <div>
-                  <h2 id="social-sign-in-title" className="font-app-display text-xl text-ink">
-                    Continue with {socialProvider === 'apple' ? 'Apple' : 'Google'}
-                  </h2>
-                  <p className="mt-1 font-app-sans text-sm text-ink/55">
-                    Confirm the email linked to your {socialProvider === 'apple' ? 'Apple' : 'Google'}{' '}
-                    account to enter Club.
-                  </p>
-                </div>
-                <label className="block space-y-1.5">
-                  <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">
-                    Email
-                  </span>
-                  <input
-                    autoFocus
-                    required
-                    type="email"
-                    autoComplete="email"
-                    value={socialEmailDraft}
-                    onChange={(e) => setSocialEmailDraft(e.target.value)}
-                    className="app-input w-full"
-                    placeholder="you@example.com"
-                  />
-                </label>
-                {error && (
-                  <p className="font-app-sans text-sm text-red-700/90" role="alert">
-                    {error}
-                  </p>
-                )}
-                <div className="flex gap-2 pt-1">
-                  <button
-                    type="button"
-                    disabled={socialBusy}
-                    onClick={closeSocial}
-                    className="app-btn app-btn-ghost flex-1"
+              <AnimatePresence>
+              {socialProvider && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.22, ease: clubEase }}
+                  className="fixed inset-0 z-40 flex items-end justify-center bg-ink/40 px-4 pb-8 sm:items-center sm:pb-0"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="social-sign-in-title"
+                  onClick={closeSocial}
+                >
+                  <motion.form
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    transition={{ duration: 0.34, ease: clubEase }}
+                    onSubmit={confirmSocial}
+                    onClick={(ev) => ev.stopPropagation()}
+                    className="w-full max-w-md space-y-4 rounded-2xl border border-ink/10 bg-paper p-5 shadow-xl"
                   >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={socialBusy || !socialEmailDraft.includes('@')}
-                    className="app-btn app-btn-ink flex-1"
-                  >
-                    {socialBusy ? 'Signing in…' : 'Continue'}
-                  </button>
-                </div>
-              </motion.form>
-            </motion.div>
+                    <div>
+                      <h2 id="social-sign-in-title" className="font-app-display text-xl text-ink">
+                        Continue with {socialProvider === 'apple' ? 'Apple' : 'Google'}
+                      </h2>
+                      <p className="mt-1 font-app-sans text-sm text-ink/55">
+                        Dev stub — confirm an email. Production requires a real Google/Apple idToken.
+                      </p>
+                    </div>
+                    <label className="block space-y-1.5">
+                      <span className="font-app-sans text-[11px] tracking-[0.16em] text-ink/50 uppercase">
+                        Email
+                      </span>
+                      <input
+                        autoFocus
+                        required
+                        type="email"
+                        autoComplete="email"
+                        value={socialEmailDraft}
+                        onChange={(e) => setSocialEmailDraft(e.target.value)}
+                        className="app-input w-full"
+                        placeholder="you@example.com"
+                      />
+                    </label>
+                    {error && (
+                      <p className="font-app-sans text-sm text-red-700/90" role="alert">
+                        {error}
+                      </p>
+                    )}
+                    <div className="flex gap-2 pt-1">
+                      <button
+                        type="button"
+                        disabled={socialBusy}
+                        onClick={closeSocial}
+                        className="app-btn app-btn-ghost flex-1"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={socialBusy || !socialEmailDraft.includes('@')}
+                        className="app-btn app-btn-ink flex-1"
+                      >
+                        {socialBusy ? 'Signing in…' : 'Continue'}
+                      </button>
+                    </div>
+                  </motion.form>
+                </motion.div>
+              )}
+              </AnimatePresence>
+
+              <div className="flex items-center gap-3">
+                <div className="h-px flex-1 bg-ink/10" />
+                <span className="font-app-sans text-[11px] tracking-wide text-ink/40 uppercase">or email</span>
+                <div className="h-px flex-1 bg-ink/10" />
+              </div>
+            </>
           )}
-          </AnimatePresence>
-
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-ink/10" />
-            <span className="font-app-sans text-[11px] tracking-wide text-ink/40 uppercase">or email</span>
-            <div className="h-px flex-1 bg-ink/10" />
-          </div>
 
           <div className="flex gap-0 border-b border-ink/10">
             {(
@@ -610,33 +614,38 @@ export default function ClubScreen() {
         className="sticky top-0 z-20 border-b border-ink/8 bg-paper/95 px-5 py-4 backdrop-blur-md"
         style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}
       >
-        <p className="font-app-sans text-[11px] font-medium tracking-[0.22em] text-atlantic uppercase">
+        <p className="font-app-sans text-[11px] font-medium tracking-[0.18em] text-atlantic uppercase">
           Meridian Club
         </p>
-        <h1 className="font-app-display text-2xl tracking-tight">Atelier credit &amp; perks</h1>
+        <h1 className="font-app-display text-2xl tracking-tight">
+          Welcome{user.name ? `, ${user.name.split(' ')[0]}` : ''}
+        </h1>
+        <p className="mt-1 font-app-sans text-sm text-ink/55">
+          Track your consult, vault, and account — guests and wishlist stay one tap away.
+        </p>
       </header>
 
       <div className="space-y-6 px-5 py-6 pb-12">
         <div className="rounded-xl border border-ink/10 bg-linear-to-br from-atlantic/12 to-transparent px-5 py-5">
           <div className="flex items-center gap-2 text-atlantic">
             <Sparkles className="h-4 w-4" />
-            <span className="font-app-sans text-[11px] tracking-[0.18em] uppercase">Balance</span>
+            <span className="font-app-sans text-[11px] tracking-[0.18em] uppercase">Planning credit</span>
           </div>
           <p className="mt-2 font-app-display text-4xl tracking-tight">{points.toLocaleString()} pts</p>
           <p className="mt-1 font-app-sans text-sm text-ink/55">
-            ≈ ${credit} planning credit · 100 pts = $1
+            ≈ ${credit} toward planning · 100 pts = $1
           </p>
         </div>
 
         <div className="flex gap-0 overflow-x-auto border-b border-ink/8">
           {(
             [
-              ['overview', 'Activity'],
               ['status', 'Consult'],
+              ['vault', 'Vault'],
+              ['settings', 'Account'],
               ['guests', 'Guests'],
               ['wishlist', 'Wishlist'],
-              ['vault', 'Vault'],
-              ['settings', 'Settings'],
+              ['overview', 'Activity'],
             ] as const
           ).map(([id, label]) => (
             <button
