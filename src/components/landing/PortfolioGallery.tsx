@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { PORTFOLIO_ITEMS } from '../../data/portfolioData';
 import { PortfolioItem, EventCategory } from '../../landingTypes';
@@ -25,6 +25,20 @@ export const PortfolioGallery: React.FC = () => {
   const closeLightbox = () => {
     setActiveItem(null);
   };
+
+  useEffect(() => {
+    if (!activeItem) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox();
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [activeItem]);
 
   const nextImage = () => {
     if (!activeItem) return;
@@ -145,24 +159,45 @@ export const PortfolioGallery: React.FC = () => {
 
       </div>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox Modal — backdrop click + Escape closes */}
       {activeItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-ink/70 md:backdrop-blur-md overflow-y-auto animate-fade-in">
-          
-          <div className="bg-paper border border-ink/10 rounded-4xl w-full max-w-4xl overflow-hidden shadow-2xl relative my-8">
-            
-            {/* Close Button */}
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/70 p-4 sm:items-center sm:p-6 md:backdrop-blur-md animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-label={activeItem.title}
+          onClick={closeLightbox}
+        >
+          {/* Always-visible close (viewport) */}
+          <button
+            type="button"
+            onClick={closeLightbox}
+            className="fixed top-4 right-4 z-[60] inline-flex items-center gap-2 rounded-xl border border-paper/20 bg-ink px-3.5 py-2.5 font-app-sans text-xs font-semibold tracking-wide text-paper shadow-lg transition-colors hover:bg-atlantic sm:top-6 sm:right-6"
+            style={{ top: 'max(1rem, env(safe-area-inset-top))' }}
+            aria-label="Close"
+            id="portfolio-lightbox-close-btn"
+          >
+            <X className="h-4 w-4" />
+            <span>Close</span>
+          </button>
+
+          <div
+            className="relative my-8 w-full max-w-4xl overflow-hidden rounded-4xl border border-ink/10 bg-paper shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* In-card close (image corner) */}
             <button
+              type="button"
               onClick={closeLightbox}
-              className="absolute top-4 right-4 z-20 p-2.5 rounded-xl bg-ink text-paper hover:bg-atlantic transition-colors cursor-pointer"
+              className="absolute top-3 right-3 z-30 inline-flex size-10 items-center justify-center rounded-xl bg-paper text-ink shadow-md transition-colors hover:bg-atlantic hover:text-paper"
               aria-label="Close modal"
-              id="portfolio-lightbox-close-btn"
+              id="portfolio-lightbox-close-card-btn"
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </button>
 
             {/* Slideshow Image Area */}
-            <div className="relative aspect-video bg-ink overflow-hidden">
+            <div className="relative aspect-video overflow-hidden bg-ink">
               <img
                 src={activeItem.galleryImages[activeImageIndex]}
                 alt={activeItem.title}
